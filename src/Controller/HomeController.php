@@ -15,7 +15,5 @@ class HomeController extends AbstractController
     {
         $tricks = $trickRepository->findAll();
         dd($tricks);
-
-        dd('accueil');
     }
 }
