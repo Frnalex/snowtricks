@@ -14,6 +14,9 @@ class HomeController extends AbstractController
     public function homepage(TrickRepository $trickRepository)
     {
         $tricks = $trickRepository->findAll();
-        dd($tricks);
+
+        return $this->render('home.html.twig', [
+            'tricks' => $tricks,
+        ]);
     }
 }
