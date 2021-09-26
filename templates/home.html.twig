@@ -1,8 +1,13 @@
-<h1>Page d'accueil</h1>
+{% extends "base.html.twig" %}
 
+{% block title %}Accueil{% endblock %}
+
+{% block body %}
+<h1>Page d'accueil</h1>
 {% for trick in tricks %}
 <div>
     <h2>{{trick.name}}</h2>
     <p>{{trick.description}}</p>
 </div>
 {% endfor %}
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+    Page de {{trick.name}}
+{% endblock %}
+
+{% block body %}
+<h1>{{trick.name}}</h1>
+<p>{{trick.description}}</p>
+<p>date de création : {{trick.createdAt|date("d/m/Y")}}</p>
+<p>Catégorie : {{trick.category.name}}</p>
+{% endblock %}
