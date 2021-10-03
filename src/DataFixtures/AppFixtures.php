@@ -24,7 +24,7 @@ class AppFixtures extends Fixture
             $category = new Category();
             $category
                 ->setName("Catégorie {$c}")
-                ->setSlug(strtolower($this->slugger->slug($category->getName())))
+                ->setSlug($this->slugger->slug($category->getName())->lower())
             ;
             $manager->persist($category);
 
@@ -33,8 +33,7 @@ class AppFixtures extends Fixture
                 $trick
                     ->setName("Trick numéro {$t} - Catégorie {$c}")
                     ->setDescription('Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iusto, explicabo!')
-                    ->setSlug(strtolower($this->slugger->slug($trick->getName())))
-                    ->setCreatedAt(new \DateTime())
+                    ->setSlug($this->slugger->slug($trick->getName())->lower())
                     ->setCategory($category)
                 ;
                 $manager->persist($trick);
@@ -43,7 +42,6 @@ class AppFixtures extends Fixture
                     $comment = new Comment();
                     $comment
                         ->setContent("Commentaire {$i} Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero praesentium, voluptatum expedita incidunt deserunt nisi assumenda quos tenetur fugit architecto.")
-                        ->setCreatedAt(new \DateTime())
                         ->setTrick($trick)
                     ;
                     $manager->persist($comment);
