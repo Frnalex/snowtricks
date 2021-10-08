@@ -5,6 +5,18 @@
 {% endblock %}
 
 {% block body %}
+
 	<h1>Création d'un nouveau trick</h1>
-	...
+
+	{{ form_start(formView) }}
+
+	{{ form_errors(formView) }}
+
+	{{ form_widget(formView) }}
+
+	<button type="submit">Ajouter</button>
+
+	{{ form_end(formView) }}
+
+
 {% endblock %}
