@@ -46,4 +46,27 @@ class TrickController extends AbstractController
             'formView' => $formView,
         ]);
     }
+
+    /**
+     * @Route("/{slug}/edit", name="trick_edit")
+     */
+    public function edit(Trick $trick, Request $request, SluggerInterface $slugger, EntityManagerInterface $em)
+    {
+        $form = $this->createForm(TrickType::class, $trick);
+
+        $formView = $form->createView();
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            $trick->setSlug($slugger->slug($trick->getName())->lower());
+            $em->flush();
+            dd($trick);
+        }
+
+        return $this->render('trick/edit.html.twig', [
+            'trick' => $trick,
+            'formView' => $formView,
+        ]);
+    }
 }
