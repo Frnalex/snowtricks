@@ -37,7 +37,10 @@ class TrickController extends AbstractController
 
             $em->persist($trick);
             $em->flush();
-            dd($trick);
+
+            return $this->redirectToRoute('trick_show', [
+                'slug' => $trick->getSlug(),
+            ]);
         }
 
         $formView = $form->createView();
@@ -61,7 +64,10 @@ class TrickController extends AbstractController
         if ($form->isSubmitted()) {
             $trick->setSlug($slugger->slug($trick->getName())->lower());
             $em->flush();
-            dd($trick);
+
+            return $this->redirectToRoute('trick_show', [
+                'slug' => $trick->getSlug(),
+            ]);
         }
 
         return $this->render('trick/edit.html.twig', [
