@@ -1,16 +1,30 @@
 {% extends "base.html.twig" %}
 {% block title %}
-	Page de
 	{{ trick.name }}
 {% endblock %}
 {% block body %}
 	<h1>{{ trick.name }}</h1>
 	<p>{{ trick.description }}</p>
-	<p>date de création :
-		{{trick.createdAt|date("d/m/Y")}}</p>
-	<p>Catégorie :
-		{{ trick.category.name }}</p>
+
+	<p>
+		date de création :
+		{{trick.createdAt|date("d/m/Y")}}
+	</p>
+
+	{% if trick.updatedAt is not null %}
+		<p>
+			date de modification :
+			{{trick.updatedAt|date("d/m/Y")}}
+		</p>
+	{% endif %}
+
+	<p>
+		Catégorie :
+		{{ trick.category.name }}
+	</p>
+
 	<hr/>
+
 
 	<h2>Commentaires</h2>
 	{% for comment in trick.comments %}

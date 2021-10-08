@@ -31,7 +31,7 @@ class TrickController extends AbstractController
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $trick = $form->getData();
             $trick->setSlug($slugger->slug($trick->getName())->lower());
 
@@ -57,18 +57,19 @@ class TrickController extends AbstractController
     {
         $form = $this->createForm(TrickType::class, $trick);
 
-        $formView = $form->createView();
-
         $form->handleRequest($request);
 
-        if ($form->isSubmitted()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $trick->setSlug($slugger->slug($trick->getName())->lower());
+            $trick->setUpdatedAt(new \DateTime());
             $em->flush();
 
             return $this->redirectToRoute('trick_show', [
                 'slug' => $trick->getSlug(),
             ]);
         }
+
+        $formView = $form->createView();
 
         return $this->render('trick/edit.html.twig', [
             'trick' => $trick,

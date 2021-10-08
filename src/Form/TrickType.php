@@ -21,18 +21,21 @@ class TrickType extends AbstractType
                 'attr' => [
                     'placeholder' => 'Tapez le nom du trick',
                 ],
+                'required' => false,
             ])
             ->add('description', TextareaType::class, [
                 'label' => 'Description',
                 'attr' => [
                     'placeholder' => 'Décrivez le trick en quelques mots',
                 ],
+                'required' => false,
             ])
             ->add('category', EntityType::class, [
                 'label' => 'Catégorie',
                 'placeholder' => '-- Choisir une catégorie --',
                 'class' => Category::class,
                 'choice_label' => 'name',
+                'required' => false,
             ])
         ;
     }

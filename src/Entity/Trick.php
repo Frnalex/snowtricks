@@ -7,6 +7,7 @@ use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @var TrickRepository
@@ -23,13 +24,25 @@ class Trick
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Le nom est obligatoire")
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 100,
+     *      minMessage = "Le nom doit faire au moins {{ limit }} caractères",
+     *      maxMessage = "Le nom doit faire maximum {{ limit }} caractères"
+     * )
      */
-    private string $name;
+    private ?string $name = '';
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Assert\NotBlank(message="La description est obligatoire")
+     * @Assert\Length(
+     *      min = 10,
+     *      minMessage = "La description doit faire au moins {{ limit }} caractères",
+     * )
      */
-    private string $description;
+    private ?string $description = '';
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
@@ -44,7 +57,7 @@ class Trick
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private DateTime $updatedAt;
+    private ?DateTime $updatedAt = null;
 
     /**
      * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="tricks")
@@ -73,7 +86,7 @@ class Trick
         return $this->name;
     }
 
-    public function setName(string $name): self
+    public function setName(?string $name): self
     {
         $this->name = $name;
 

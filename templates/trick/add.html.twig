@@ -10,9 +10,17 @@
 
 	{{ form_start(formView) }}
 
-	{{ form_errors(formView) }}
+	<div>
+		{{ form_row(formView.name) }}
+	</div>
 
-	{{ form_widget(formView) }}
+	<div>
+		{{ form_row(formView.description) }}
+	</div>
+
+	<div>
+		{{ form_row(formView.category) }}
+	</div>
 
 	<button type="submit">Ajouter</button>
 
