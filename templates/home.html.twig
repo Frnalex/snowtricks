@@ -1,15 +1,20 @@
 {% extends "base.html.twig" %}
 
-{% block title %}Accueil{% endblock %}
+{% block title %}Accueil
+{% endblock %}
 
 {% block body %}
-<h1>Page d'accueil</h1>
-{% for trick in tricks %}
-<div>
-    <h2>{{trick.name}}</h2>
-    <p>{{trick.description}}</p>
-    <a href="{{ path("trick_show", {slug: trick.slug}) }}">Détails</a>
-    <hr>
-</div>
-{% endfor %}
+	{% for flashSuccess in app.flashes('verify_email_success') %}
+		<p>{{ flashSuccess }}</p>
+	{% endfor %}
+
+	<h1>Page d'accueil</h1>
+	{% for trick in tricks %}
+		<div>
+			<h2>{{trick.name}}</h2>
+			<p>{{trick.description}}</p>
+			<a href="{{ path("trick_show", {slug: trick.slug}) }}">Détails</a>
+			<hr>
+		</div>
+	{% endfor %}
 {% endblock %}

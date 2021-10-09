@@ -4,14 +4,14 @@
 	<ul>
 		{% if app.user %}
 			<li>
-				<a href="{{ path("security_logout") }}">Logout</a>
+				<a href="{{ path("auth_logout") }}">Logout</a>
 			</li>
 		{% else %}
 			<li>
-				<a href="{{ path("register") }}">Inscription</a>
+				<a href="{{ path("auth_register") }}">Inscription</a>
 			</li>
 			<li>
-				<a href="{{ path("security_login") }}">Login</a>
+				<a href="{{ path("auth_login") }}">Login</a>
 			</li>
 		{% endif %}
 	</ul>

@@ -43,10 +43,8 @@ class TrickController extends AbstractController
             ]);
         }
 
-        $formView = $form->createView();
-
         return $this->render('trick/add.html.twig', [
-            'formView' => $formView,
+            'trickForm' => $form->createView(),
         ]);
     }
 
@@ -69,11 +67,9 @@ class TrickController extends AbstractController
             ]);
         }
 
-        $formView = $form->createView();
-
         return $this->render('trick/edit.html.twig', [
             'trick' => $trick,
-            'formView' => $formView,
+            'trickForm' => $form->createView(),
         ]);
     }
 }
