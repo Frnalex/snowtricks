@@ -3,7 +3,7 @@ security:
     enable_authenticator_manager: true
     # https://symfony.com/doc/current/security.html#c-hashing-passwords
     password_hashers:
-        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
+        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: "auto"
         App\Entity\User:
             algorithm: auto
 
@@ -21,7 +21,17 @@ security:
         main:
             lazy: true
             provider: app_user_provider
-            custom_authenticator: App\Security\LoginFormAuthenticator
+
+            form_login:
+                login_path: security_login
+                check_path: security_login
+                username_parameter: login[email]
+                password_parameter: login[password]
+
+            logout:
+                path: security_logout
+                # where to redirect after logout
+                # target: app_any_route
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#firewalls-authentication

@@ -2,8 +2,14 @@
 	<a href="/">Accueil</a>
 
 	<ul>
-		<li><a href="#">Logout</a></li>
-		<li><a href="#">Inscription</a></li>
-		<li><a href="#">Login</a></li>
+		<li>
+			<a href="{{ path("security_logout") }}">Logout</a>
+		</li>
+		<li>
+			<a href="#">Inscription</a>
+		</li>
+        <li>
+		    <a href="{{ path("security_login") }}">Login</a>
+        </li>
 	</ul>
 </nav>

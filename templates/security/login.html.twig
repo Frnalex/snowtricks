@@ -10,7 +10,7 @@
 	{{ form_start(formView) }}
 
 	{% if error %}
-		<p>{{error.message}}</p>
+		<div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
 	{% endif %}
 
 	<div>
@@ -21,6 +21,7 @@
 		{{ form_row(formView.password) }}
 	</div>
 
+	<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 	<button type="submit">Connexion</button>
 
 	{{ form_end(formView) }}
