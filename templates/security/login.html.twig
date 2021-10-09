@@ -7,22 +7,21 @@
 {% block body %}
 	<h1>Connexion</h1>
 
-	{{ form_start(formView) }}
+	{{ form_start(loginForm) }}
 
 	{% if error %}
 		<div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
 	{% endif %}
 
 	<div>
-		{{ form_row(formView.email) }}
+		{{ form_row(loginForm.email) }}
 	</div>
 
 	<div>
-		{{ form_row(formView.password) }}
+		{{ form_row(loginForm.password) }}
 	</div>
 
-	<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 	<button type="submit">Connexion</button>
 
-	{{ form_end(formView) }}
+	{{ form_end(loginForm) }}
 {% endblock %}
