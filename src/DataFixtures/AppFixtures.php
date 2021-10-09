@@ -5,6 +5,7 @@ namespace App\DataFixtures;
 use App\Entity\Category;
 use App\Entity\Comment;
 use App\Entity\Trick;
+use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\String\Slugger\SluggerInterface;
@@ -47,6 +48,17 @@ class AppFixtures extends Fixture
                     $manager->persist($comment);
                 }
             }
+        }
+
+        for ($u = 1; $u <= 5; ++$u) {
+            $user = new User();
+            $user
+                ->setEmail("user{$u}@gmail.com")
+                ->setPassword('password')
+                ->setUsername("user{$u}")
+            ;
+
+            $manager->persist($user);
         }
 
         $manager->flush();
