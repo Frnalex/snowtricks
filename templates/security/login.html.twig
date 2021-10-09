@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	Connexion
+{% endblock %}
+
+{% block body %}
+	<h1>Connexion</h1>
+
+	{{ form_start(formView) }}
+
+	<div>
+		{{ form_row(formView.username) }}
+	</div>
+
+	<div>
+		{{ form_row(formView.email) }}
+	</div>
+
+	<div>
+		{{ form_row(formView.password) }}
+	</div>
+
+	<button type="submit">Connexion</button>
+
+	{{ form_end(formView) }}
+{% endblock %}
