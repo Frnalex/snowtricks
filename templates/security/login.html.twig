@@ -9,9 +9,9 @@
 
 	{{ form_start(formView) }}
 
-	<div>
-		{{ form_row(formView.username) }}
-	</div>
+	{% if error %}
+		<p>{{error.message}}</p>
+	{% endif %}
 
 	<div>
 		{{ form_row(formView.email) }}
