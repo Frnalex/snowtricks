@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Trick;
+use App\Form\CommentType;
 use App\Form\TrickType;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -16,10 +17,32 @@ class TrickController extends AbstractController
     /**
      * @Route("/{slug}", name="trick_show")
      */
-    public function show(Trick $trick)
+    public function show(Trick $trick, Request $request, EntityManagerInterface $em)
     {
+        $form = $this->createForm(CommentType::class);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            if (null === $this->getUser()) {
+                return $this->redirectToRoute('auth_login');
+            }
+
+            $comment = $form->getData();
+            $comment->setTrick($trick);
+            $comment->setUser($this->getUser());
+
+            $em->persist($comment);
+            $em->flush();
+
+            return $this->redirectToRoute('trick_show', [
+                'slug' => $trick->getSlug(),
+            ]);
+        }
+
         return $this->render('trick/show.html.twig', [
             'trick' => $trick,
+            'commentForm' => $form->createView(),
         ]);
     }
 

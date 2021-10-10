@@ -26,6 +26,26 @@
 	<hr/>
 
 
+	<h2>Nouveau commentaire</h2>
+
+	{% if app.user %}
+		{{ form_start(commentForm) }}
+
+		<div>
+			{{ form_row(commentForm.content) }}
+		</div>
+
+		<button type="submit">Ajouter</button>
+
+		{{ form_end(commentForm) }}
+
+	{% else %}
+		<p>Vous devez être connecté pour ajouter un commentaire</p>
+		<a href="{{ path("auth_register") }}">Inscription</a>
+		<a href="{{ path("auth_login") }}">Login</a>
+	{% endif %}
+
+
 	<h2>Commentaires</h2>
 	{% for comment in trick.comments %}
 		<b>{{comment.user.userIdentifier }}</b>
