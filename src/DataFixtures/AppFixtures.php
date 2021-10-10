@@ -62,6 +62,7 @@ class AppFixtures extends Fixture
                 ->setEmail("user{$u}@gmail.com")
                 ->setPassword($hash)
                 ->setUsername("user{$u}")
+                ->setIsVerified(true)
             ;
 
             $manager->persist($user);

@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Trick;
 use App\Form\TrickType;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -24,6 +25,7 @@ class TrickController extends AbstractController
 
     /**
      * @Route("/trick/add", name="trick_add")
+     * @IsGranted("ROLE_USER")
      */
     public function add(Request $request, SluggerInterface $slugger, EntityManagerInterface $em)
     {
@@ -50,6 +52,7 @@ class TrickController extends AbstractController
 
     /**
      * @Route("/{slug}/edit", name="trick_edit")
+     * @IsGranted("ROLE_USER")
      */
     public function edit(Trick $trick, Request $request, SluggerInterface $slugger, EntityManagerInterface $em)
     {
@@ -75,6 +78,7 @@ class TrickController extends AbstractController
 
     /**
      * @Route("/{slug}/delete", name="trick_delete")
+     * @IsGranted("ROLE_USER")
      */
     public function delete(Trick $trick, EntityManagerInterface $em)
     {
