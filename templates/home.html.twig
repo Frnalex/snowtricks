@@ -5,10 +5,6 @@
 
 {% block body %}
 
-	<pre>
-	{{ dump(app.user) }}
-</pre>
-
 	{% for flashSuccess in app.flashes('verify_email_success') %}
 		<p>{{ flashSuccess }}</p>
 	{% endfor %}
