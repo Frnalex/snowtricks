@@ -28,8 +28,10 @@
 
 	<h2>Commentaires</h2>
 	{% for comment in trick.comments %}
+		<b>{{comment.user.userIdentifier }}</b>
 		<p>{{ comment.content }}</p>
 		<p>date de création :
 			{{comment.createdAt|date("d/m/Y")}}</p>
+		<br>
 	{% endfor %}
 {% endblock %}
