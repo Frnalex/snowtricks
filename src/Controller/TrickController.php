@@ -14,10 +14,18 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 
 class TrickController extends AbstractController
 {
+
+    private $em;
+
+    public function __construct(EntityManagerInterface $em)
+    {
+        $this->em = $em;
+    }
+
     /**
      * @Route("/{slug}", name="trick_show")
      */
-    public function show(Trick $trick, Request $request, EntityManagerInterface $em)
+    public function show(Trick $trick, Request $request)
     {
         $form = $this->createForm(CommentType::class);
 
@@ -32,8 +40,8 @@ class TrickController extends AbstractController
             $comment->setTrick($trick);
             $comment->setUser($this->getUser());
 
-            $em->persist($comment);
-            $em->flush();
+            $this->em->persist($comment);
+            $this->em->flush();
 
             return $this->redirectToRoute('trick_show', [
                 'slug' => $trick->getSlug(),
@@ -50,7 +58,7 @@ class TrickController extends AbstractController
      * @Route("/trick/add", name="trick_add")
      * @IsGranted("ROLE_USER")
      */
-    public function add(Request $request, SluggerInterface $slugger, EntityManagerInterface $em)
+    public function add(Request $request, SluggerInterface $slugger)
     {
         $form = $this->createForm(TrickType::class);
 
@@ -60,8 +68,8 @@ class TrickController extends AbstractController
             $trick = $form->getData();
             $trick->setSlug($slugger->slug($trick->getName())->lower());
 
-            $em->persist($trick);
-            $em->flush();
+            $this->em->persist($trick);
+            $this->em->flush();
 
             return $this->redirectToRoute('trick_show', [
                 'slug' => $trick->getSlug(),
@@ -77,7 +85,7 @@ class TrickController extends AbstractController
      * @Route("/{slug}/edit", name="trick_edit")
      * @IsGranted("ROLE_USER")
      */
-    public function edit(Trick $trick, Request $request, SluggerInterface $slugger, EntityManagerInterface $em)
+    public function edit(Trick $trick, Request $request, SluggerInterface $slugger)
     {
         $form = $this->createForm(TrickType::class, $trick);
 
@@ -86,7 +94,7 @@ class TrickController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $trick->setSlug($slugger->slug($trick->getName())->lower());
             $trick->setUpdatedAt(new \DateTime());
-            $em->flush();
+            $this->em->flush();
 
             return $this->redirectToRoute('trick_show', [
                 'slug' => $trick->getSlug(),
@@ -103,10 +111,10 @@ class TrickController extends AbstractController
      * @Route("/{slug}/delete", name="trick_delete")
      * @IsGranted("ROLE_USER")
      */
-    public function delete(Trick $trick, EntityManagerInterface $em)
+    public function delete(Trick $trick)
     {
-        $em->remove($trick);
-        $em->flush();
+        $this->em->remove($trick);
+        $this->em->flush();
 
         $this->addFlash('trick_delete_success', 'Le trick a bien été supprimé de la base de donnée');
 
