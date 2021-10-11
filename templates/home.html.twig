@@ -5,12 +5,25 @@
 {% endblock %}
 
 {% block body %}
+
+	{% for flashSuccess in app.flashes('verify_email_success') %}
+		<p>{{ flashSuccess }}</p>
+	{% endfor %}
+	{% for flashSuccess in app.flashes('trick_delete_success') %}
+		<p>{{ flashSuccess }}</p>
+	{% endfor %}
+
 	<h1>Page d'accueil</h1>
 	{% for trick in tricks %}
 		<div>
 			<h2>{{trick.name}}</h2>
 			<p>{{trick.description}}</p>
 			<a href="{{ path("trick_show", {slug: trick.slug}) }}">Détails</a>
+
+			{% if app.user %}
+				<a href="{{ path("trick_edit", {slug: trick.slug}) }}">Modifier</a>
+				<a href="{{ path("trick_delete", {slug: trick.slug}) }}">Supprimer</a>
+			{% endif %}
 			<hr>
 		</div>
 	{% endfor %}

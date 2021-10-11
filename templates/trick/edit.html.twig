@@ -7,23 +7,23 @@
 {% block body %}
 	<h1>Modifier un trick</h1>
 
-	{{ form_start(formView) }}
+	{{ form_start(trickForm) }}
 
 	<div>
-		{{ form_row(formView.name) }}
+		{{ form_row(trickForm.name) }}
 	</div>
 
 	<div>
-		{{ form_row(formView.description) }}
+		{{ form_row(trickForm.description) }}
 	</div>
 
 	<div>
-		{{ form_row(formView.category) }}
+		{{ form_row(trickForm.category) }}
 	</div>
 
 	<button type="submit">Modifier</button>
 
-	{{ form_end(formView) }}
+	{{ form_end(trickForm) }}
 
 
 {% endblock %}

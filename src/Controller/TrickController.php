@@ -43,10 +43,8 @@ class TrickController extends AbstractController
             ]);
         }
 
-        $formView = $form->createView();
-
         return $this->render('trick/add.html.twig', [
-            'formView' => $formView,
+            'trickForm' => $form->createView(),
         ]);
     }
 
@@ -69,11 +67,22 @@ class TrickController extends AbstractController
             ]);
         }
 
-        $formView = $form->createView();
-
         return $this->render('trick/edit.html.twig', [
             'trick' => $trick,
-            'formView' => $formView,
+            'trickForm' => $form->createView(),
         ]);
+    }
+
+    /**
+     * @Route("/{slug}/delete", name="trick_delete")
+     */
+    public function delete(Trick $trick, EntityManagerInterface $em)
+    {
+        $em->remove($trick);
+        $em->flush();
+
+        $this->addFlash('trick_delete_success', 'Le trick a bien été supprimé de la base de donnée');
+
+        return $this->redirectToRoute('homepage');
     }
 }
