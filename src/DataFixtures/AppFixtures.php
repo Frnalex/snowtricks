@@ -5,17 +5,21 @@ namespace App\DataFixtures;
 use App\Entity\Category;
 use App\Entity\Comment;
 use App\Entity\Trick;
+use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
 class AppFixtures extends Fixture
 {
     protected $slugger;
+    protected $hasher;
 
-    public function __construct(SluggerInterface $slugger)
+    public function __construct(SluggerInterface $slugger, UserPasswordHasherInterface $hasher)
     {
         $this->slugger = $slugger;
+        $this->hasher = $hasher;
     }
 
     public function load(ObjectManager $manager)
@@ -47,6 +51,20 @@ class AppFixtures extends Fixture
                     $manager->persist($comment);
                 }
             }
+        }
+
+        for ($u = 1; $u <= 5; ++$u) {
+            $user = new User();
+
+            $hash = $this->hasher->hashPassword($user, 'password');
+
+            $user
+                ->setEmail("user{$u}@gmail.com")
+                ->setPassword($hash)
+                ->setUsername("user{$u}")
+            ;
+
+            $manager->persist($user);
         }
 
         $manager->flush();
