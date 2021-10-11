@@ -17,7 +17,7 @@ class Comment
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private int $id;
+    private ?int $id = null;
 
     /**
      * @ORM\Column(type="text")
@@ -33,7 +33,7 @@ class Comment
      * @ORM\ManyToOne(targetEntity=Trick::class, inversedBy="comments")
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
-    private $trick;
+    private Trick $trick;
 
     public function __construct()
     {
