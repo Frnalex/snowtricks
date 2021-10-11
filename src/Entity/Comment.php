@@ -2,10 +2,12 @@
 
 namespace App\Entity;
 
+use App\Repository\CommentRepository;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * @var CommentRepository
  * @ORM\Entity(repositoryClass=CommentRepository::class)
  */
 class Comment

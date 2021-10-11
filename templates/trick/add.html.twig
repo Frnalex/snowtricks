@@ -1,0 +1,30 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+	Création d'un nouveau trick
+{% endblock %}
+
+{% block body %}
+
+	<h1>Création d'un nouveau trick</h1>
+
+	{{ form_start(formView) }}
+
+	<div>
+		{{ form_row(formView.name) }}
+	</div>
+
+	<div>
+		{{ form_row(formView.description) }}
+	</div>
+
+	<div>
+		{{ form_row(formView.category) }}
+	</div>
+
+	<button type="submit">Ajouter</button>
+
+	{{ form_end(formView) }}
+
+
+{% endblock %}
