@@ -36,8 +36,8 @@ class TrickType extends AbstractType
                 'class' => Category::class,
                 'choice_label' => 'name',
                 'required' => false,
-            ])
-        ;
+                'invalid_message' => "Cette catégorie n'est pas valide",
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

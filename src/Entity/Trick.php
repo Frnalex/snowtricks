@@ -60,13 +60,15 @@ class Trick
     private ?DateTime $updatedAt = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="tricks")
+     * @ORM\ManyToOne(targetEntity=Category::class)
      * @ORM\JoinColumn(nullable=false)
+     * @Assert\NotNull(message="Vous devez choisir une catégorie")
      */
-    private Category $category;
+    private ?Category $category;
 
     /**
      * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="trick", orphanRemoval=true)
+     * @ORM\OrderBy({"createdAt" = "DESC"})
      */
 
     private Collection $comments;

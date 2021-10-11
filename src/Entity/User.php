@@ -27,12 +27,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @Assert\NotBlank(message="L'email est obligatoire'")
      * @Assert\Email( message = "L'email '{{ value }}' n'est pas valide" )
      */
-    private ?string $email = '';
+    private string $email;
 
     /**
      * @ORM\Column(type="json")
      */
-    private $roles = [];
+    private array $roles = [];
 
     /**
      * @var string The hashed password
@@ -43,18 +43,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      *      minMessage = "La mot de passe doit contenir au moins {{ limit }} caractères",
      * )
      */
-    private $password;
+    private string $password;
+
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(message="L'username est obligatoire")
      */
-    private ?string $username = '';
+    private string $username;
 
     /**
      * @ORM\Column(type="boolean")
      */
-    private $isVerified = false;
+    private bool $isVerified = false;
 
     public function getId(): ?int
     {
@@ -80,7 +81,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUserIdentifier(): string
     {
-        return (string) $this->email;
+        return (string) $this->username;
     }
 
     /**
@@ -88,7 +89,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUsername(): string
     {
-        return (string) $this->email;
+        return (string) $this->username;
     }
 
     /**

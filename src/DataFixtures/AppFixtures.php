@@ -8,6 +8,7 @@ use App\Entity\Trick;
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
+use Faker\Factory;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
@@ -24,6 +25,27 @@ class AppFixtures extends Fixture
 
     public function load(ObjectManager $manager)
     {
+        $faker = Factory::create('fr_FR');
+
+        $users = [];
+
+        for ($u = 1; $u <= 5; ++$u) {
+            $user = new User();
+
+            $hash = $this->hasher->hashPassword($user, 'password');
+
+            $user
+                ->setEmail("user{$u}@gmail.com")
+                ->setPassword($hash)
+                ->setUsername($faker->userName())
+                ->setIsVerified(true)
+            ;
+
+            $users[] = $user;
+
+            $manager->persist($user);
+        }
+
         for ($c = 1; $c <= 3; ++$c) {
             $category = new Category();
             $category
@@ -35,8 +57,8 @@ class AppFixtures extends Fixture
             for ($t = 1; $t <= mt_rand(3, 10); ++$t) {
                 $trick = new Trick();
                 $trick
-                    ->setName("Trick numéro {$t} - Catégorie {$c}")
-                    ->setDescription('Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iusto, explicabo!')
+                    ->setName($faker->sentence())
+                    ->setDescription($faker->paragraph())
                     ->setSlug($this->slugger->slug($trick->getName())->lower())
                     ->setCategory($category)
                 ;
@@ -45,27 +67,13 @@ class AppFixtures extends Fixture
                 for ($i = 1; $i <= mt_rand(2, 5); ++$i) {
                     $comment = new Comment();
                     $comment
-                        ->setContent("Commentaire {$i} Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero praesentium, voluptatum expedita incidunt deserunt nisi assumenda quos tenetur fugit architecto.")
+                        ->setContent($faker->paragraph())
                         ->setTrick($trick)
+                        ->setUser($faker->randomElement($users))
                     ;
                     $manager->persist($comment);
                 }
             }
-        }
-
-        for ($u = 1; $u <= 5; ++$u) {
-            $user = new User();
-
-            $hash = $this->hasher->hashPassword($user, 'password');
-
-            $user
-                ->setEmail("user{$u}@gmail.com")
-                ->setPassword($hash)
-                ->setUsername("user{$u}")
-                ->setIsVerified(true)
-            ;
-
-            $manager->persist($user);
         }
 
         $manager->flush();
