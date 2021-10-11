@@ -17,7 +17,7 @@ class Comment
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private int $id;
+    private ?int $id = null;
 
     /**
      * @ORM\Column(type="text")
@@ -34,7 +34,7 @@ class Comment
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private Trick $trick;
-
+  
     /**
      * @ORM\ManyToOne(targetEntity=User::class)
      * @ORM\JoinColumn(nullable=false)
