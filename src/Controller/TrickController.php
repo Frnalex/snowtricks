@@ -14,7 +14,6 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 
 class TrickController extends AbstractController
 {
-
     private $em;
 
     public function __construct(EntityManagerInterface $em)

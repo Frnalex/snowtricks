@@ -1,0 +1,29 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+	Modifier un trick
+{% endblock %}
+
+{% block body %}
+	<h1>Modifier un trick</h1>
+
+	{{ form_start(trickForm) }}
+
+	<div>
+		{{ form_row(trickForm.name) }}
+	</div>
+
+	<div>
+		{{ form_row(trickForm.description) }}
+	</div>
+
+	<div>
+		{{ form_row(trickForm.category) }}
+	</div>
+
+	<button type="submit">Modifier</button>
+
+	{{ form_end(trickForm) }}
+
+
+{% endblock %}

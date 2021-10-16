@@ -1,0 +1,15 @@
+{{ form_widget(trickForm._token)}}
+
+{{ form_row(trickForm.name) }}
+{{ form_row(trickForm.description) }}
+{{ form_row(trickForm.category) }}
+
+{{ form_errors(trickForm.videos) }}
+<button type="button" id='js-new-video' class='js-btn-new' data-collection='#videos'>Ajouter une vidéo</button>
+<div id='videos' data-prototype='{{ include("trick/_video.html.twig", {form: trickForm.videos.vars.prototype})|e("html_attr")}}' data-index='{{ trickForm.videos|length > 0 ? trickForm.videos|last.vars.name + 1 : 0 }}'>
+	{% for video in trickForm.videos %}
+		<div>
+			{{ include("trick/_video.html.twig", {form: video}) }}
+		</div>
+	{% endfor %}
+</div>

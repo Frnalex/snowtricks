@@ -10,21 +10,14 @@
 
 	{{ form_start(trickForm) }}
 
-	<div>
-		{{ form_row(trickForm.name) }}
-	</div>
+	{{ include("trick/_form.html.twig", {trickForm: trickForm}) }}
+
 
 	<div>
-		{{ form_row(trickForm.description) }}
+		<button type="submit">Ajouter</button>
 	</div>
 
-	<div>
-		{{ form_row(trickForm.category) }}
-	</div>
-
-	<button type="submit">Ajouter</button>
-
-	{{ form_end(trickForm) }}
+	{{ form_end(trickForm, {render_rest: false}) }}
 
 
 {% endblock %}
