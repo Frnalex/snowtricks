@@ -10,6 +10,8 @@ use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class TrickType extends AbstractType
@@ -22,14 +24,12 @@ class TrickType extends AbstractType
                 'attr' => [
                     'placeholder' => 'Tapez le nom du trick',
                 ],
-                'required' => false,
             ])
             ->add('description', TextareaType::class, [
                 'label' => 'Description',
                 'attr' => [
                     'placeholder' => 'Décrivez le trick en quelques mots',
                 ],
-                'required' => false,
             ])
             ->add('category', EntityType::class, [
                 'label' => 'Catégorie',
@@ -46,6 +46,21 @@ class TrickType extends AbstractType
                 'allow_delete' => true,
                 'error_bubbling' => false,
             ])
+            ->add('images', CollectionType::class, [
+                'entry_type' => ImageType::class,
+                'by_reference' => false,
+                'allow_add' => true,
+                'allow_delete' => true,
+                'error_bubbling' => false,
+            ])
+            ->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
+                $data = $event->getData();
+                foreach ($data->getVideos() as $video) {
+                    if ('' === $video->getUrl()) {
+                        $data->removeVideo($video);
+                    }
+                }
+            })
         ;
     }
 

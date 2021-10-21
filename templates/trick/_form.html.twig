@@ -13,3 +13,13 @@
 		</div>
 	{% endfor %}
 </div>
+
+{{ form_errors(trickForm.images) }}
+<button type="button" id='js-new-image' class='js-btn-new' data-collection='#images'>Ajouter une image</button>
+<div id='images' data-prototype='{{ include("trick/_image.html.twig", {form: trickForm.images.vars.prototype})|e("html_attr")}}' data-index='{{ trickForm.images|length > 0 ? trickForm.images|last.vars.name + 1 : 0 }}'>
+	{% for image in trickForm.images %}
+		<div>
+			{{ include("trick/_image.html.twig", {form: image}) }}
+		</div>
+	{% endfor %}
+</div>

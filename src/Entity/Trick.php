@@ -64,7 +64,7 @@ class Trick
      * @ORM\JoinColumn(nullable=false)
      * @Assert\NotNull(message="Vous devez choisir une catégorie")
      */
-    private ?Category $category;
+    private Category $category;
 
     /**
      * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="trick", orphanRemoval=true)
@@ -78,11 +78,18 @@ class Trick
      */
     private Collection $videos;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Image::class, mappedBy="trick", orphanRemoval=true, cascade={"persist"})
+     * @Assert\Valid
+     */
+    private Collection $images;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
         $this->createdAt = new DateTime();
         $this->videos = new ArrayCollection();
+        $this->images = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -187,6 +194,36 @@ class Trick
             // set the owning side to null (unless already changed)
             if ($video->getTrick() === $this) {
                 $video->setTrick(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Image[]
+     */
+    public function getImages(): Collection
+    {
+        return $this->images;
+    }
+
+    public function addImage(Image $image): self
+    {
+        if (!$this->images->contains($image)) {
+            $this->images->add($image);
+            $image->setTrick($this);
+        }
+
+        return $this;
+    }
+
+    public function removeImage(Image $image): self
+    {
+        if ($this->images->removeElement($image)) {
+            // set the owning side to null (unless already changed)
+            if ($image->getTrick() === $this) {
+                $image->setTrick(null);
             }
         }
 

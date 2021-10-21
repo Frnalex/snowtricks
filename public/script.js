@@ -1,17 +1,3 @@
-// const videosCollectionHolder = document.querySelector("#trick_videos");
-
-// let indexVideos = videosCollectionHolder.querySelectorAll("div").length;
-
-// const addVideo = (e) => {
-//     console.log(indexVideos);
-//     videosCollectionHolder.innerHTML += videosCollectionHolder.dataset.prototype.replace(/__name__/g, indexVideos);
-//     indexVideos++;
-// };
-
-// const btnAddVideo = document.querySelector("#js-new-video");
-
-// btnAddVideo?.addEventListener("click", (e) => addVideo(e));
-
 const newItem = (e) => {
     const collectionHolder = document.querySelector(e.currentTarget.dataset.collection);
 
