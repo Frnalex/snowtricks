@@ -60,6 +60,11 @@ class TrickType extends AbstractType
                         $data->removeVideo($video);
                     }
                 }
+                foreach ($data->getImages() as $image) {
+                    if (null === $image->getFile()) {
+                        $data->removeImage($image);
+                    }
+                }
             })
         ;
     }

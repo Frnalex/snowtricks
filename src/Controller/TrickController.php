@@ -2,9 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Image;
 use App\Entity\Trick;
 use App\Form\CommentType;
 use App\Form\TrickType;
+use App\Service\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -57,7 +59,7 @@ class TrickController extends AbstractController
      * @Route("/trick/add", name="trick_add")
      * @IsGranted("ROLE_USER")
      */
-    public function add(Request $request, SluggerInterface $slugger)
+    public function add(Request $request, SluggerInterface $slugger, FileUploader $fileUploader)
     {
         $form = $this->createForm(TrickType::class);
 
@@ -66,6 +68,16 @@ class TrickController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $trick = $form->getData();
             $trick->setSlug($slugger->slug($trick->getName())->lower());
+
+            /** @var Collection|Image[] */
+            $images = $form->get('images')->getData();
+            foreach ($images as $image) {
+                if (null !== $image->getFile()) {
+                    $path = $fileUploader->upload($image->getFile());
+                    $image->setName($path);
+                    $trick->addImage($image);
+                }
+            }
 
             $this->em->persist($trick);
             $this->em->flush();
