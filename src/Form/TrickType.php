@@ -39,6 +39,9 @@ class TrickType extends AbstractType
                 'invalid_message' => "Cette catégorie n'est pas valide",
                 'required' => false,
             ])
+            ->add('mainImage', ImageType::class, [
+                'label' => 'Image de couverture',
+            ])
             ->add('videos', CollectionType::class, [
                 'entry_type' => VideoType::class,
                 'by_reference' => false,
@@ -55,6 +58,7 @@ class TrickType extends AbstractType
             ])
             ->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
                 $data = $event->getData();
+
                 foreach ($data->getVideos() as $video) {
                     if ('' === $video->getUrl()) {
                         $data->removeVideo($video);

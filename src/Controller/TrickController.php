@@ -98,6 +98,7 @@ class TrickController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $trick->setSlug($slugger->slug($trick->getName())->lower());
             $trick->setUpdatedAt(new \DateTime());
+
             $this->addImages($trick);
 
             $this->em->flush();
@@ -129,6 +130,14 @@ class TrickController extends AbstractController
 
     private function addImages(Trick $trick)
     {
+        /** @var Image */
+        $mainImage = $trick->getMainImage();
+        if ($mainImage && null === $mainImage->getName()) {
+            $path = $this->fileUploader->upload($mainImage->getFile());
+            $mainImage->setName($path);
+            $mainImage->setTrick($trick);
+        }
+
         /** @var Image $image */
         foreach ($trick->getImages() as $image) {
             if (null === $image->getName()) {
