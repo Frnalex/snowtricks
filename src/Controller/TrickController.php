@@ -17,10 +17,12 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 class TrickController extends AbstractController
 {
     private $em;
+    private $fileUploader;
 
-    public function __construct(EntityManagerInterface $em)
+    public function __construct(EntityManagerInterface $em, FileUploader $fileUploader)
     {
         $this->em = $em;
+        $this->fileUploader = $fileUploader;
     }
 
     /**
@@ -68,12 +70,7 @@ class TrickController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $trick = $form->getData();
             $trick->setSlug($slugger->slug($trick->getName())->lower());
-
-            /** @var Image $image */
-            foreach ($trick->getImages() as $image) {
-                $path = $fileUploader->upload($image->getFile());
-                $image->setName($path);
-            }
+            $this->addImages($trick);
 
             $this->em->persist($trick);
             $this->em->flush();
@@ -92,7 +89,7 @@ class TrickController extends AbstractController
      * @Route("/{slug}/edit", name="trick_edit")
      * @IsGranted("ROLE_USER")
      */
-    public function edit(Trick $trick, Request $request, SluggerInterface $slugger, FileUploader $fileUploader)
+    public function edit(Trick $trick, Request $request, SluggerInterface $slugger)
     {
         $form = $this->createForm(TrickType::class, $trick);
 
@@ -101,14 +98,7 @@ class TrickController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $trick->setSlug($slugger->slug($trick->getName())->lower());
             $trick->setUpdatedAt(new \DateTime());
-
-            /** @var Image $image */
-            foreach ($trick->getImages() as $image) {
-                if (null === $image->getName()) {
-                    $path = $fileUploader->upload($image->getFile());
-                    $image->setName($path);
-                }
-            }
+            $this->addImages($trick);
 
             $this->em->flush();
 
@@ -135,5 +125,16 @@ class TrickController extends AbstractController
         $this->addFlash('trick_delete_success', 'Le trick a bien été supprimé de la base de donnée');
 
         return $this->redirectToRoute('homepage');
+    }
+
+    private function addImages(Trick $trick)
+    {
+        /** @var Image $image */
+        foreach ($trick->getImages() as $image) {
+            if (null === $image->getName()) {
+                $path = $this->fileUploader->upload($image->getFile());
+                $image->setName($path);
+            }
+        }
     }
 }
