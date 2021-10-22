@@ -61,7 +61,7 @@ class TrickType extends AbstractType
                     }
                 }
                 foreach ($data->getImages() as $image) {
-                    if (null === $image->getFile()) {
+                    if (null === $image->getFile() && null === $image->getName()) {
                         $data->removeImage($image);
                     }
                 }

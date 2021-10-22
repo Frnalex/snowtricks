@@ -8,12 +8,12 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 
 class FileUploader
 {
-    private $targetDirectory;
+    private $uploadsDirectory;
     private $slugger;
 
-    public function __construct($targetDirectory, SluggerInterface $slugger)
+    public function __construct(string $uploadsDirectory, SluggerInterface $slugger)
     {
-        $this->targetDirectory = $targetDirectory;
+        $this->uploadsDirectory = $uploadsDirectory;
         $this->slugger = $slugger;
     }
 
@@ -24,7 +24,7 @@ class FileUploader
         $fileName = $safeFilename.'-'.uniqid().'.'.$file->guessExtension();
 
         try {
-            $file->move($this->targetDirectory, $fileName);
+            $file->move($this->uploadsDirectory, $fileName);
         } catch (FileException $e) {
             return null;
         }

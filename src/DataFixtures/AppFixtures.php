@@ -6,6 +6,7 @@ use App\Entity\Category;
 use App\Entity\Comment;
 use App\Entity\Trick;
 use App\Entity\User;
+use App\Entity\Video;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
@@ -72,6 +73,15 @@ class AppFixtures extends Fixture
                         ->setUser($faker->randomElement($users))
                     ;
                     $manager->persist($comment);
+                }
+
+                for ($v = 1; $v < mt_rand(2, 4); ++$v) {
+                    $video = new Video();
+                    $video
+                        ->setUrl("https://video-{$v}.com")
+                        ->setTrick($trick)
+                    ;
+                    $manager->persist($video);
                 }
             }
         }

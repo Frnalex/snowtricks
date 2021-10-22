@@ -4,7 +4,6 @@ namespace App\Entity;
 
 use App\Repository\ImageRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -38,7 +37,7 @@ class Image
     /**
      * @Assert\Image
      */
-    private ?UploadedFile $file = null;
+    private $file;
 
     public function getId(): ?int
     {
@@ -81,12 +80,12 @@ class Image
         return $this;
     }
 
-    public function getFile(): ?UploadedFile
+    public function getFile()
     {
         return $this->file;
     }
 
-    public function setFile(?UploadedFile $file): void
+    public function setFile($file): void
     {
         $this->file = $file;
     }

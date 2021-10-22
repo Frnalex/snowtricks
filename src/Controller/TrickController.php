@@ -69,14 +69,10 @@ class TrickController extends AbstractController
             $trick = $form->getData();
             $trick->setSlug($slugger->slug($trick->getName())->lower());
 
-            /** @var Collection|Image[] */
-            $images = $form->get('images')->getData();
-            foreach ($images as $image) {
-                if (null !== $image->getFile()) {
-                    $path = $fileUploader->upload($image->getFile());
-                    $image->setName($path);
-                    $trick->addImage($image);
-                }
+            /** @var Image $image */
+            foreach ($trick->getImages() as $image) {
+                $path = $fileUploader->upload($image->getFile());
+                $image->setName($path);
             }
 
             $this->em->persist($trick);
@@ -96,7 +92,7 @@ class TrickController extends AbstractController
      * @Route("/{slug}/edit", name="trick_edit")
      * @IsGranted("ROLE_USER")
      */
-    public function edit(Trick $trick, Request $request, SluggerInterface $slugger)
+    public function edit(Trick $trick, Request $request, SluggerInterface $slugger, FileUploader $fileUploader)
     {
         $form = $this->createForm(TrickType::class, $trick);
 
@@ -105,6 +101,15 @@ class TrickController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $trick->setSlug($slugger->slug($trick->getName())->lower());
             $trick->setUpdatedAt(new \DateTime());
+
+            /** @var Image $image */
+            foreach ($trick->getImages() as $image) {
+                if (null === $image->getName()) {
+                    $path = $fileUploader->upload($image->getFile());
+                    $image->setName($path);
+                }
+            }
+
             $this->em->flush();
 
             return $this->redirectToRoute('trick_show', [
