@@ -75,10 +75,10 @@ class AppFixtures extends Fixture
                     $manager->persist($comment);
                 }
 
-                for ($v = 1; $v < mt_rand(2, 4); ++$v) {
+                for ($v = 1; $v < mt_rand(1, 3); ++$v) {
                     $video = new Video();
                     $video
-                        ->setUrl("https://video-{$v}.com")
+                        ->setUrl('https://www.youtube.com/embed/t705_V-RDcQ')
                         ->setTrick($trick)
                     ;
                     $manager->persist($video);
