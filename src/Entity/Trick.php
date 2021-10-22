@@ -85,7 +85,7 @@ class Trick
     private Collection $images;
 
     /**
-     * @ORM\OneToOne(targetEntity=Image::class, cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=Image::class, orphanRemoval=true, cascade={"persist", "remove"})
      */
     private ?Image $mainImage = null;
 

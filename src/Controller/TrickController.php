@@ -26,7 +26,7 @@ class TrickController extends AbstractController
     }
 
     /**
-     * @Route("/{slug}", name="trick_show")
+     * @Route("/{slug}", name="trick_show", priority=-1)
      */
     public function show(Trick $trick, Request $request)
     {
