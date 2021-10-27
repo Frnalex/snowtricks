@@ -13,7 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @UniqueEntity(fields={"email"}, message="Un utilisateur avec le même email est déjà enregistré")
  */
-class User implements UserInterface, PasswordAuthenticatedUserInterface
+class User implements UserInterface, PasswordAuthenticatedUserInterface, \Serializable
 {
     /**
      * @ORM\Id
@@ -45,7 +45,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private string $password;
 
-
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(message="L'username est obligatoire")
@@ -56,6 +55,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="boolean")
      */
     private bool $isVerified = false;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Image::class, cascade={"persist", "remove"})
+     */
+    private ?Image $profilePicture = null;
 
     public function getId(): ?int
     {
@@ -163,5 +167,37 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->isVerified = $isVerified;
 
         return $this;
+    }
+
+    public function getProfilePicture(): ?Image
+    {
+        return $this->profilePicture;
+    }
+
+    public function setProfilePicture(?Image $profilePicture): self
+    {
+        $this->profilePicture = $profilePicture;
+
+        return $this;
+    }
+
+    public function serialize()
+    {
+        return serialize([
+            $this->id,
+            $this->email,
+            $this->password,
+            $this->username
+        ]);
+    }
+
+    public function unserialize($serialized)
+    {
+        list(
+            $this->id,
+            $this->email,
+            $this->password,
+            $this->username
+        ) = unserialize($serialized);
     }
 }

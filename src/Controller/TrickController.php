@@ -61,7 +61,7 @@ class TrickController extends AbstractController
      * @Route("/trick/add", name="trick_add")
      * @IsGranted("ROLE_USER")
      */
-    public function add(Request $request, SluggerInterface $slugger, FileUploader $fileUploader)
+    public function add(Request $request, SluggerInterface $slugger)
     {
         $form = $this->createForm(TrickType::class);
 
@@ -70,7 +70,7 @@ class TrickController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $trick = $form->getData();
             $trick->setSlug($slugger->slug($trick->getName())->lower());
-            $this->addImages($trick);
+            $this->uploadImages($trick);
 
             $this->em->persist($trick);
             $this->em->flush();
@@ -99,7 +99,7 @@ class TrickController extends AbstractController
             $trick->setSlug($slugger->slug($trick->getName())->lower());
             $trick->setUpdatedAt(new \DateTime());
 
-            $this->addImages($trick);
+            $this->uploadImages($trick);
 
             $this->em->flush();
 
@@ -128,14 +128,13 @@ class TrickController extends AbstractController
         return $this->redirectToRoute('homepage');
     }
 
-    private function addImages(Trick $trick)
+    private function uploadImages(Trick $trick)
     {
         /** @var Image */
         $mainImage = $trick->getMainImage();
         if ($mainImage && null === $mainImage->getName()) {
             $path = $this->fileUploader->upload($mainImage->getFile());
             $mainImage->setName($path);
-            $mainImage->setTrick($trick);
         }
 
         /** @var Image $image */
