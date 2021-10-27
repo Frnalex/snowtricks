@@ -27,7 +27,6 @@ class UserController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $user = $this->getUser();
 
-
             /** @var Image */
             $image = $form->getData();
 

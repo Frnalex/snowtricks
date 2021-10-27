@@ -9,8 +9,10 @@
 
 	<h1>Page de profil</h1>
 
-	<h2>Photo de profil</h2>
-	<img src="{{ asset('uploads/' ~ app.user.profilePicture.name) }}" alt="{{app.user.profilePicture.alt}}">
+	{% if app.user.profilePicture %}
+		<h2>Photo de profil</h2>
+		<img src="{{ asset('uploads/' ~ app.user.profilePicture.name) }}" alt="{{app.user.profilePicture.alt}}">
+	{% endif %}
 
 	{{ form_start(imageForm) }}
 

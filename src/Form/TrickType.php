@@ -58,6 +58,11 @@ class TrickType extends AbstractType
             ])
             ->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
                 $data = $event->getData();
+                // $mainImage = $data->getMainImage();
+
+                // if (null === $mainImage->getFile()) {
+                //     $data->removeImage($mainImage);
+                // }
 
                 foreach ($data->getVideos() as $video) {
                     if ('' === $video->getUrl()) {

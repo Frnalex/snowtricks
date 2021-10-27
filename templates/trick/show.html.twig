@@ -23,8 +23,10 @@
 		{{ trick.category.name }}
 	</p>
 
-	<h2>Photo de couverture</h2>
-	<img src={{ asset('uploads/' ~ trick.mainImage.name) }} alt={{trick.mainImage.alt}}>
+	{% if trick.mainImage %}
+		<h2>Photo de couverture</h2>
+		<img src={{ asset('uploads/' ~ trick.mainImage.name) }} alt={{trick.mainImage.alt}}>
+	{% endif %}
 
 
 	<h2>Videos</h2>

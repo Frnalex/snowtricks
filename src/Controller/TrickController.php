@@ -132,14 +132,14 @@ class TrickController extends AbstractController
     {
         /** @var Image */
         $mainImage = $trick->getMainImage();
-        if ($mainImage && null === $mainImage->getName()) {
+        if (null !== $mainImage->getFile()) {
             $path = $this->fileUploader->upload($mainImage->getFile());
             $mainImage->setName($path);
         }
 
         /** @var Image $image */
         foreach ($trick->getImages() as $image) {
-            if (null === $image->getName()) {
+            if (null !== $image->getFile()) {
                 $path = $this->fileUploader->upload($image->getFile());
                 $image->setName($path);
             }
