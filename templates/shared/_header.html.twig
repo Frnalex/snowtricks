@@ -30,13 +30,10 @@
 							</li>
 						{% else %}
 							<li>
+								<a href="{{ path("auth_login") }}" class="inner-link">Connexion</a>
+							</li>
+							<li>
 								<a href="{{ path("auth_register") }}" class="inner-link">Inscription</a>
-							</li>
-							<li>
-								<a href="{{ path("auth_login") }}" class="inner-link">Login</a>
-							</li>
-							<li>
-								<a href="{{ path("auth_register") }}" class="inner-link">Register</a>
 							</li>
 						{% endif %}
 					</ul>

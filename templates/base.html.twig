@@ -20,9 +20,11 @@
 		<script defer src="/script.js"></script>
 	</head>
 	<body>
-		{% include "shared/_navbar.html.twig" %}
+		{% include "shared/_header.html.twig" %}
+
 		{% block body %}{% endblock %}
 
+		{% include "shared/_footer.html.twig" %}
 		{# JAVASCRIPT #}
 		<script type="text/javascript" src="js/jquery.min.js"></script>
 		<script type="text/javascript" src="js/bootsnav.js"></script>
