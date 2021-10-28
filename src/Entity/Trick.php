@@ -7,11 +7,13 @@ use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @var TrickRepository
  * @ORM\Entity(repositoryClass=TrickRepository::class)
+ * @UniqueEntity("name", message="Ce nom est déjà utilisé")
  */
 class Trick
 {

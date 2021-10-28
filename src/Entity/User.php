@@ -11,7 +11,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
- * @UniqueEntity(fields={"email"}, message="Un utilisateur avec le même email est déjà enregistré")
+ * @UniqueEntity("email", message="Un utilisateur avec le même email est déjà enregistré")
+ * @UniqueEntity("username", message="Un utilisateur avec le même username est déjà enregistré")
  */
 class User implements UserInterface, PasswordAuthenticatedUserInterface, \Serializable
 {
@@ -46,7 +47,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \Serial
     private string $password;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
      * @Assert\NotBlank(message="L'username est obligatoire")
      */
     private string $username;
