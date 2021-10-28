@@ -5,8 +5,8 @@
 {% endblock %}
 
 {% block body %}
-	{% for flashError in app.flashes('verify_email_error') %}
-		<div class="alert alert-danger" role="alert">{{ flashError }}</div>
+	{% for flashSuccess in app.flashes('verify_email_error') %}
+		<p>{{ flashSuccess }}</p>
 	{% endfor %}
 
 	<h1>Inscription</h1>
