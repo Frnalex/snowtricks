@@ -36,4 +36,23 @@ class Mailer
 
         $this->mailer->send($email);
     }
+
+    public function sendForgotPasswordEmail($email, $token)
+    {
+        $email = (new TemplatedEmail())
+            ->from(new Address('admin@snowtricks.com', 'Snowtricks'))
+            ->to(new Address($email))
+            ->subject('Modification de votre mot de passe')
+
+            // path of the Twig template to render
+            ->htmlTemplate('authentication/forgot_password_email.html.twig')
+
+            // pass variables to the template
+            ->context([
+                'token' => $token,
+            ])
+        ;
+
+        $this->mailer->send($email);
+    }
 }

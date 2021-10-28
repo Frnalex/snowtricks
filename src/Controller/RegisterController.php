@@ -10,20 +10,21 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
 
 class RegisterController extends AbstractController
 {
     /**
      * @Route("/register", name="auth_register")
      */
-    public function register(Request $request, UserPasswordHasherInterface $hasher, Mailer $mailer): Response
+    public function register(Request $request, UserPasswordHasherInterface $hasher, TokenGeneratorInterface $tokenGenerator, Mailer $mailer): Response
     {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $user->setTokenVerification($this->generateToken());
+            $user->setTokenVerification($tokenGenerator->generateToken());
             $user->setPassword(
                 $hasher->hashPassword($user, $form->get('password')->getData())
             );
@@ -64,10 +65,5 @@ class RegisterController extends AbstractController
         $this->addFlash('verify_email_error', "Ce compte n'exsite pas !");
 
         return $this->redirectToRoute('auth_register');
-    }
-
-    private function generateToken(): string
-    {
-        return rtrim(strtr(base64_encode(random_bytes(32)), '+/', '-_'), '=');
     }
 }

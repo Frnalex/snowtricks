@@ -20,9 +20,6 @@ class CommentType extends AbstractType
                 ],
                 'required' => false,
             ])
-            // ->add('createdAt')
-            // ->add('trick')
-            // ->add('user')
         ;
     }
 

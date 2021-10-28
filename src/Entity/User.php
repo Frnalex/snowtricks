@@ -66,6 +66,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \Serial
      */
     private ?string $tokenVerification = null;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $tokenForgotPassword;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -214,6 +219,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \Serial
     public function setTokenVerification(?string $tokenVerification): self
     {
         $this->tokenVerification = $tokenVerification;
+
+        return $this;
+    }
+
+    public function getTokenForgotPassword(): ?string
+    {
+        return $this->tokenForgotPassword;
+    }
+
+    public function setTokenForgotPassword(?string $tokenForgotPassword): self
+    {
+        $this->tokenForgotPassword = $tokenForgotPassword;
 
         return $this;
     }

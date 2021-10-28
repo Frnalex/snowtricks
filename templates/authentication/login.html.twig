@@ -29,6 +29,10 @@
 		{{ form_row(loginForm.password) }}
 	</div>
 
+	<p>
+		<a href="{{ path("auth_forgot_password") }}">Mot de passe oublié ?</a>
+	</p>
+
 	<button type="submit">Connexion</button>
 
 	{{ form_end(loginForm) }}
