@@ -28,7 +28,7 @@
 				<div class="col-12 col-lg-6 wow animate__fadeIn">
 					<div class="padding-fifteen-all bg-white border-radius-6 lg-padding-seven-all">
 						{% if error %}
-							<div class="alert alert-danger alert-dismissible" role="alert">
+							<div class="alert alert-danger" role="alert">
 								{{ error.messageKey|trans(error.messageData, 'security') }}
 							</div>
 						{% endif %}
@@ -53,8 +53,14 @@
 						</p>
 					</div>
 
-					<div class="d-flex justify-content-center">
-						<button type="submit" class="btn btn-small border-radius-4 btn-black">Connexion</button>
+					<div class="d-flex align-items-center flex-column">
+						<button type="submit" class="btn btn-small border-radius-4 btn-black mb-2">Connexion</button>
+						<p>
+							Pas de compte ?
+							<strong>
+								<a href="{{ path("auth_register") }}">Inscrivez-vous</a>
+							</strong>
+						</p>
 					</div>
 				</div>
 			</div>

@@ -53,7 +53,7 @@ class AuthenticationController extends AbstractController
             ]);
 
             if (!$user) {
-                $this->addFlash('error', "Aucun utilisateur n'est enregisté avec cette adresse");
+                $this->addFlash('danger', "Aucun utilisateur n'est enregisté avec cette adresse");
 
                 return $this->redirectToRoute('auth_forgot_password');
             }
