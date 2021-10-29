@@ -6,18 +6,31 @@
 
 {% block body %}
 
-	<h1>Modifier un trick</h1>
+	<section class="wow animate__fadeIn bg-light-gray">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-12 col-lg-7 text-center margin-100px-bottom sm-margin-40px-bottom">
+					<div class="position-relative overflow-hidden w-100">
+						<span class="text-large text-outside-line-full alt-font font-weight-600 text-uppercase">Modifier un trick</span>
+					</div>
+				</div>
+			</div>
 
-	{{ form_start(trickForm) }}
+			{{ form_start(trickForm) }}
+			<div class="row justify-content-center">
+				<div class="col-12 col-lg-8 wow animate__fadeIn">
+					<div class="padding-fifteen-all bg-white border-radius-6 lg-padding-seven-all">
+						{{ include("trick/_form.html.twig", {trickForm: trickForm}) }}
 
-	{{ include("trick/_form.html.twig", {trickForm: trickForm}) }}
-
-
-	<div>
-		<button type="submit">Modifier</button>
-	</div>
-
-	{{ form_end(trickForm, {render_rest: false}) }}
+						<div class="d-flex align-items-center flex-column">
+							<button type="submit" class="btn btn-small border-radius-4 btn-black">Modifier</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			{{ form_end(trickForm, {render_rest: false}) }}
+		</div>
+	</section>
 
 
 {% endblock %}

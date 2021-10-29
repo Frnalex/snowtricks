@@ -1,15 +1,13 @@
-<div class='bg-white p-3 mb-2 col-md-6'>
+<div class='bg-white p-3 mb-2'>
 
-	<img class='vignette' src={{ asset('uploads/' ~ path) }}>
-	<div class="text-danger">
-		{{ form_errors(form.file) }}
-	</div>
-
-	<div hidden>
+	<div>
+		<div class="text-danger">
+			{{ form_errors(form.file) }}
+		</div>
 		{{ form_widget(form.file) }}
 	</div>
 
-	<div hidden>
+	<div>
 		<div class="text-danger">
 			{{ form_errors(form.alt) }}
 		</div>

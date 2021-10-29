@@ -18,3 +18,11 @@ ul {
     width: 150px;
     height: 150px;
 }
+
+img.vignette {
+    max-height: 150px;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    display: block;
+}

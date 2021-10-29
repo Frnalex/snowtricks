@@ -21,9 +21,6 @@ class TrickType extends AbstractType
         $builder
             ->add('name', TextType::class, [
                 'label' => 'Nom',
-                'attr' => [
-                    'placeholder' => 'Tapez le nom du trick',
-                ],
             ])
             ->add('description', TextareaType::class, [
                 'label' => 'Description',
@@ -82,6 +79,9 @@ class TrickType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Trick::class,
+            'attr' => [
+                'novalidate' => 'novalidate',
+            ],
         ]);
     }
 }
