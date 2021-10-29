@@ -28,40 +28,37 @@
 				<div class="col-12 col-lg-6 wow animate__fadeIn">
 					<div class="padding-fifteen-all bg-white border-radius-6 lg-padding-seven-all">
 						{% if error %}
-							<div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+							<div class="alert alert-danger alert-dismissible" role="alert">
+								{{ error.messageKey|trans(error.messageData, 'security') }}
+							</div>
 						{% endif %}
 						<div>
-							{{ form_row(loginForm.email) }}
-							{{ form_row(loginForm.password) }}
-							<button type="submit" class="btn btn-small border-radius-4 btn-black">Connexion</button>
+							{{ form_label(loginForm.email) }}
+							<div class="text-danger">
+								{{ form_errors(loginForm.email) }}
+							</div>
+							{{ form_widget(loginForm.email) }}
 						</div>
+						<div>
+							{{ form_label(loginForm.password) }}
+							<div class="text-danger">
+								{{ form_errors(loginForm.password) }}
+							</div>
+							{{ form_widget(loginForm.password) }}
+							<p class='text-end'>
+								<strong>
+									<a href="{{ path("auth_forgot_password") }}">Mot de passe oublié ?</a>
+								</strong>
+							</p>
+						</p>
+					</div>
+
+					<div class="d-flex justify-content-center">
+						<button type="submit" class="btn btn-small border-radius-4 btn-black">Connexion</button>
 					</div>
 				</div>
 			</div>
-			{{ form_end(loginForm) }}
 		</div>
-	</section>
-
-
-	{# {{ form_start(loginForm) }}
-	
-		{% if error %}
-			<div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-		{% endif %}
-	
-		<div>
-			{{ form_row(loginForm.email) }}
-		</div>
-	
-		<div>
-			{{ form_row(loginForm.password) }}
-		</div>
-	
-		<p>
-			<a href="{{ path("auth_forgot_password") }}">Mot de passe oublié ?</a>
-		</p>
-	
-		<button type="submit">Connexion</button>
-	
-		{{ form_end(loginForm) }} #}
-{% endblock %}
+		{{ form_end(loginForm) }}
+	</div>
+</section>{% endblock %}
