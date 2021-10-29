@@ -3,71 +3,153 @@
 	{{ trick.name }}
 {% endblock %}
 {% block body %}
-	<h1>{{ trick.name }}</h1>
-	<p>{{ trick.description }}</p>
 
-	<p>
-		date de création :
-		{{trick.createdAt|date("d/m/Y")}}
-	</p>
-
-	{% if trick.updatedAt is not null %}
-		<p>
-			date de modification :
-			{{trick.updatedAt|date("d/m/Y")}}
-		</p>
-	{% endif %}
-
-	<p>
-		Catégorie :
-		{{ trick.category.name }}
-	</p>
-
-	{% if trick.mainImage %}
-		<h2>Photo de couverture</h2>
-		<img src={{ asset('uploads/' ~ trick.mainImage.name) }} alt={{trick.mainImage.alt}}>
-	{% endif %}
-
-
-	<h2>Videos</h2>
-	{% for video in trick.videos %}
-		<iframe width="420" height="315" src={{ video.url }}></iframe>
-	{% endfor %}
-
-	<h2>Images</h2>
-	{% for image in trick.images %}
-		<img src={{ asset('uploads/' ~ image.name) }} alt={{image.alt}}>
-	{% endfor %}
-
-	<hr/>
-
-
-	<h2>Nouveau commentaire</h2>
-
-	{% if app.user %}
-		{{ form_start(commentForm) }}
-
-		<div>
-			{{ form_row(commentForm.content) }}
+	<!-- start page title section -->
+	<section class="wow animate__fadeIn cover-background background-position-top" style="background-image:url('{{ asset('uploads/' ~ trick.mainImage.name) }}');">
+		<div class="opacity-medium bg-extra-dark-gray"></div>
+		<div class="container position-relative">
+			<div class="row align-items-center">
+				<div
+					class="col-12 d-flex justify-content-center flex-column text-center page-title-large padding-30px-tb">
+					<!-- start sub title -->
+					<span class="text-white-2 opacity6 alt-font margin-10px-bottom d-block text-uppercase text-small">
+						{{trick.createdAt|date("d/m/Y")}}&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;{{ trick.category.name }}
+					</span>
+					<!-- end sub title -->
+					<!-- start page title -->
+					<h1 class="text-white-2 alt-font font-weight-600 margin-10px-bottom">{{ trick.name }}</h1>
+					<!-- end page title -->
+				</div>
+			</div>
 		</div>
+	</section>
+	<!-- end page title section -->
 
-		<button type="submit">Ajouter</button>
+	<!-- start post content section -->
+	<section>
+		<div class="container">
+			<div class="row justify-content-center">
+				<main class="col-12 col-xl-9 col-lg-8 right-sidebar md-margin-60px-bottom sm-margin-40px-bottom">
+					<div class="col-12 blog-details-text last-paragraph-no-margin">
+						<p class='text-large'>{{ trick.description }}</p>
+					</div>
 
-		{{ form_end(commentForm) }}
+					{# PHOTOS #}
+					<div class="row margin-45px-bottom margin-45px-top sm-margin-30px-bottom text-center text-md-start">
+						<div class="col-12 mx-auto text-center margin-80px-tb md-margin-50px-tb sm-margin-30px-bottom">
+							<div class="position-relative overflow-hidden w-100">
+								<span class="text-small text-outside-line-full alt-font font-weight-600 text-uppercase text-extra-dark-gray">Photos</span>
+							</div>
+						</div>
+						<div class="col-12">
+							<ul class="hover-option4 lightbox-gallery portfolio-wrapper grid grid-loading grid-3col xl-grid-3col lg-grid-3col md-grid-2col sm-grid-2col xs-grid-1col gutter-small">
+								<li class="grid-sizer"></li>
 
-	{% else %}
-		<p>Vous devez être connecté pour ajouter un commentaire</p>
-		<a href="{{ path("auth_register") }}">Inscription</a>
-		<a href="{{ path("auth_login") }}">Login</a>
-	{% endif %}
+								{% for image in trick.images %}
+									<!-- start portfolio item -->
+									<li class="grid-item">
+										<a href="{{ asset('uploads/' ~ image.name) }}" title="gallerie d'images" data-group="lightbox-gallery">
+											<figure>
+												<div class="portfolio-img bg-extra-dark-gray"><img src="{{ asset('uploads/' ~ image.name) }}" alt="{{image.alt}}" class="project-img-gallery"/></div>
+												<figcaption>
+													<div class="portfolio-hover-main d-flex justify-content-center align-items-center">
+														<div class="portfolio-hover-content position-relative">
+															<i class="ti-zoom-in text-white-2 fa-2x"></i>
+														</div>
+													</div>
+												</figcaption>
+											</figure>
+										</a>
+									</li>
+									<!-- end portfolio item -->
+								{% endfor %}
+							</ul>
+						</div>
+					</div>
 
+					{# VIDEOS #}
+					<div class="row margin-45px-bottom margin-45px-top sm-margin-30px-bottom text-center text-md-start">
+						<div class="col-12 mx-auto text-center margin-80px-tb md-margin-50px-tb sm-margin-30px-bottom">
+							<div class="position-relative overflow-hidden w-100">
+								<span class="text-small text-outside-line-full alt-font font-weight-600 text-uppercase text-extra-dark-gray">Vidéos</span>
+							</div>
+						</div>
+						<div class="fit-videos">
+							{% for video in trick.videos %}
+								<div class="mb-5">
+									<iframe class='mb-5' width="560" height="315" src="{{ video.url }}" allowfullscreen></iframe>
+								</div>
+							{% endfor %}
+						</div>
+					</div>
 
-	<h2>Commentaires</h2>
-	{% for comment in trick.comments %}
-		<b>{{comment.user.userIdentifier }}</b>
-		<p>{{ comment.content }}</p>
-		<p>date de création :
-			{{comment.createdAt|date("d/m/Y")}}</p>
-		<br>
-	{% endfor %}
+					{# ADD A COMMENT #}
+					<div class="row">
+						<div class="col-12 mx-auto text-center margin-80px-tb md-margin-50px-tb sm-margin-30px-bottom">
+							<div class="position-relative overflow-hidden w-100">
+								<span class="text-small text-outside-line-full alt-font font-weight-600 text-uppercase text-extra-dark-gray">Ajouter un commentaire</span>
+							</div>
+						</div>
+						<div class="col-12">
+							<div class="row">
+								<div class="col-12">
+									{% if app.user %}
+										{{ form_start(commentForm) }}
+										<div>
+											{{ form_label(commentForm.content) }}
+											<div class="text-danger">
+												{{ form_errors(commentForm.content) }}
+											</div>
+											{{ form_widget(commentForm.content) }}
+										</div>
+
+										<div class="d-flex align-items-center flex-column">
+											<button type="submit" class="btn btn-small border-radius-4 btn-black">Ajouter</button>
+										</div>
+										{{ form_end(commentForm) }}
+									{% else %}
+										<div class='text-center'>
+											<p>Vous devez être connecté pour ajouter un commentaire</p>
+											<a href="{{ path("auth_login") }}" class="btn btn-small border-radius-4 btn-black mb-2">Connexion</a>
+											<a href="{{ path("auth_register") }}" class="btn btn-small border-radius-4 btn-black mb-2">Inscription</a>
+										</div>
+									{% endif %}
+								</div>
+							</div>
+						</div>
+					</div>
+
+					{# COMMENTS #}
+					<div class="col-12 blog-details-comments">
+						<div class="w-100 mx-auto text-center margin-80px-tb md-margin-50px-tb sm-margin-30px-bottom">
+							<div class="position-relative overflow-hidden w-100">
+								<span class="text-small text-outside-line-full alt-font font-weight-600 text-uppercase text-extra-dark-gray">
+									{{trick.comments|length}}
+									Commentaires
+								</span>
+							</div>
+						</div>
+						<ul class="blog-comment">
+							{% for comment in trick.comments %}
+								<li>
+									<div class="d-block d-md-flex w-100">
+										<div class="w-110px sm-w-50px text-center sm-margin-10px-bottom">
+											<img src="{{ asset('uploads/' ~ comment.user.profilePicture.name) }}" class="img-small border-radius-100 w-85 sm-w-100" alt=""/>
+										</div>
+										<div class="w-100 padding-40px-left last-paragraph-no-margin sm-no-padding-left">
+											<p class="mb-0 text-extra-dark-gray text-uppercase alt-font font-weight-600 text-small">{{comment.user.userIdentifier }}</p>
+											<div class="text-small text-medium-gray text-uppercase margin-10px-bottom">{{comment.createdAt|date("d/m/Y")}}</div>
+											<p>{{ comment.content }}</p>
+										</div>
+									</div>
+								</li>
+							{% endfor %}
+						</ul>
+					</div>
+
+				</main>
+			</div>
+		</div>
+	</section>
+
 {% endblock %}
