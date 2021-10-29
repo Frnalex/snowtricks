@@ -6,22 +6,62 @@
 
 {% block body %}
 
+	<section class="wow animate__fadeIn bg-light-gray">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-12 col-lg-7 text-center margin-100px-bottom sm-margin-40px-bottom">
+					<div class='mb-5 profile-picture'>
+						<img class='border-radius-100 ' src="{{ asset('uploads/' ~ app.user.profilePicture.name) }}" alt="{{app.user.profilePicture.alt}}">
+					</div>
+					<div class="position-relative overflow-hidden w-100">
+						<span class="text-large text-outside-line-full alt-font font-weight-600 text-uppercase">Profil de
+							{{ app.user.username }}</span>
+					</div>
+				</div>
 
-	<h1>Page de profil</h1>
+			</div>
 
-	{% if app.user.profilePicture %}
-		<h2>Photo de profil</h2>
-		<img src="{{ asset('uploads/' ~ app.user.profilePicture.name) }}" alt="{{app.user.profilePicture.alt}}">
-	{% endif %}
+			{{ form_start(imageForm) }}
+			<div class="row justify-content-center">
+				<div class="col-12 col-lg-6 wow animate__fadeIn">
+					<div class="padding-fifteen-all bg-white border-radius-6 lg-padding-seven-all">
 
-	{{ form_start(imageForm) }}
+						{{ form_widget(imageForm._token)}}
 
-	{{ form_widget(imageForm._token)}}
+						<div>
+							{{ form_label(imageForm.file, 'Modifiez votre photo de profil') }}
+							<div class="text-danger">
+								{{ form_errors(imageForm.file) }}
+							</div>
+							{{ form_widget(imageForm.file) }}
+						</div>
 
-	{{ form_row(imageForm.file) }}
+						<div class="d-flex align-items-center flex-column">
+							<button type="submit" class="btn btn-small border-radius-4 btn-black">Envoyer</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			{{ form_end(imageForm, {render_rest: false}) }}
+		</div>
+	</section>
 
-	<button type="submit">Envoyer</button>
 
-	{{ form_end(imageForm, {render_rest: false}) }}
+	{# <h1>Page de profil</h1>
+									
+										{% if app.user.profilePicture %}
+											<h2>Photo de profil</h2>
+											<img src="{{ asset('uploads/' ~ app.user.profilePicture.name) }}" alt="{{app.user.profilePicture.alt}}">
+										{% endif %}
+									
+										{{ form_start(imageForm) }}
+									
+										{{ form_widget(imageForm._token)}}
+									
+										{{ form_row(imageForm.file) }}
+									
+										<button type="submit">Envoyer</button>
+									
+										{{ form_end(imageForm, {render_rest: false}) }} #}
 
 {% endblock %}

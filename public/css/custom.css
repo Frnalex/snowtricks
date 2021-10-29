@@ -7,3 +7,14 @@ ul {
     list-style: none;
     padding: 0;
 }
+
+.profile-picture {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.profile-picture img {
+    object-fit: cover;
+    width: 150px;
+    height: 150px;
+}
