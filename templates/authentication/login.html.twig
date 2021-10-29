@@ -6,34 +6,62 @@
 
 {% block body %}
 
-	{% for flashSuccess in app.flashes('verify_email_success') %}
-		<p>{{ flashSuccess }}</p>
-	{% endfor %}
-	{% for flashSuccess in app.flashes('verify_email_sent') %}
-		<p>{{ flashSuccess }}</p>
-	{% endfor %}
 
-	<h1>Connexion</h1>
+	<section class="wow animate__fadeIn bg-light-gray">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-12 col-lg-7 text-center margin-100px-bottom sm-margin-40px-bottom">
+					<div class="position-relative overflow-hidden w-100">
+						<span class="text-large text-outside-line-full alt-font font-weight-600 text-uppercase">Connexion</span>
+					</div>
+				</div>
+				{% for flashSuccess in app.flashes('verify_email_success') %}
+					<p>{{ flashSuccess }}</p>
+				{% endfor %}
+				{% for flashSuccess in app.flashes('verify_email_sent') %}
+					<p>{{ flashSuccess }}</p>
+				{% endfor %}
+			</div>
 
-	{{ form_start(loginForm) }}
+			{{ form_start(loginForm) }}
+			<div class="row justify-content-center">
+				<div class="col-12 col-lg-6 wow animate__fadeIn">
+					<div class="padding-fifteen-all bg-white border-radius-6 lg-padding-seven-all">
+						{% if error %}
+							<div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+						{% endif %}
+						<div>
+							{{ form_row(loginForm.email) }}
+							{{ form_row(loginForm.password) }}
+							<button type="submit" class="btn btn-small border-radius-4 btn-black">Connexion</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			{{ form_end(loginForm) }}
+		</div>
+	</section>
 
-	{% if error %}
-		<div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-	{% endif %}
 
-	<div>
-		{{ form_row(loginForm.email) }}
-	</div>
-
-	<div>
-		{{ form_row(loginForm.password) }}
-	</div>
-
-	<p>
-		<a href="{{ path("auth_forgot_password") }}">Mot de passe oublié ?</a>
-	</p>
-
-	<button type="submit">Connexion</button>
-
-	{{ form_end(loginForm) }}
+	{# {{ form_start(loginForm) }}
+	
+		{% if error %}
+			<div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+		{% endif %}
+	
+		<div>
+			{{ form_row(loginForm.email) }}
+		</div>
+	
+		<div>
+			{{ form_row(loginForm.password) }}
+		</div>
+	
+		<p>
+			<a href="{{ path("auth_forgot_password") }}">Mot de passe oublié ?</a>
+		</p>
+	
+		<button type="submit">Connexion</button>
+	
+		{{ form_end(loginForm) }} #}
 {% endblock %}

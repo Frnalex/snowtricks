@@ -25,8 +25,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \Serial
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
-     * @Assert\NotBlank(message="L'email est obligatoire'")
-     * @Assert\Email( message = "L'email '{{ value }}' n'est pas valide" )
+     * @Assert\NotBlank(message="L'adresse email est obligatoire")
+     * @Assert\Email( message = "L'adresse email '{{ value }}' n'est pas valide" )
      */
     private string $email;
 
@@ -48,7 +48,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \Serial
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
-     * @Assert\NotBlank(message="L'username est obligatoire")
+     * @Assert\NotBlank(message="Le nom d'utilisateur est obligatoire")
      */
     private string $username;
 

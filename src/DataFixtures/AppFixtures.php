@@ -4,6 +4,7 @@ namespace App\DataFixtures;
 
 use App\Entity\Category;
 use App\Entity\Comment;
+use App\Entity\Image;
 use App\Entity\Trick;
 use App\Entity\User;
 use App\Entity\Video;
@@ -35,11 +36,15 @@ class AppFixtures extends Fixture
 
             $hash = $this->hasher->hashPassword($user, 'password');
 
+            $profilePicture = new Image();
+            $profilePicture->setName('default-profile.png');
+
             $user
                 ->setEmail("user{$u}@gmail.com")
                 ->setPassword($hash)
                 ->setUsername($faker->userName())
                 ->setIsVerified(true)
+                ->setProfilePicture($profilePicture)
             ;
 
             $users[] = $user;
@@ -66,6 +71,13 @@ class AppFixtures extends Fixture
                 $manager->persist($trick);
 
                 for ($i = 1; $i <= mt_rand(2, 5); ++$i) {
+                    $image = new Image();
+                    $image->setName('default-trick.png');
+                    $image->setTrick($trick);
+                    $manager->persist($image);
+                }
+
+                for ($co = 1; $co <= mt_rand(2, 5); ++$co) {
                     $comment = new Comment();
                     $comment
                         ->setContent($faker->paragraph())
