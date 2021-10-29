@@ -61,12 +61,16 @@ class AppFixtures extends Fixture
             $manager->persist($category);
 
             for ($t = 1; $t <= mt_rand(3, 10); ++$t) {
+                $mainImage = new Image();
+                $mainImage->setName('default-trick.png');
+
                 $trick = new Trick();
                 $trick
                     ->setName($faker->sentence())
                     ->setDescription($faker->paragraph())
                     ->setSlug($this->slugger->slug($trick->getName())->lower())
                     ->setCategory($category)
+                    ->setMainImage($mainImage)
                 ;
                 $manager->persist($trick);
 
@@ -87,7 +91,7 @@ class AppFixtures extends Fixture
                     $manager->persist($comment);
                 }
 
-                for ($v = 1; $v < mt_rand(1, 3); ++$v) {
+                for ($v = 1; $v < mt_rand(2, 3); ++$v) {
                     $video = new Video();
                     $video
                         ->setUrl('https://www.youtube.com/embed/t705_V-RDcQ')

@@ -34,7 +34,6 @@ class TrickType extends AbstractType
                 'class' => Category::class,
                 'choice_label' => 'name',
                 'invalid_message' => "Cette catégorie n'est pas valide",
-                'required' => false,
             ])
             ->add('mainImage', ImageType::class, [
                 'label' => 'Image de couverture',

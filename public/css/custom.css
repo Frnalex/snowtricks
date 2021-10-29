@@ -19,6 +19,12 @@ ul {
     height: 150px;
 }
 
+.img-small {
+    width: 50px !important;
+    height: 50px !important;
+    object-fit: cover;
+}
+
 img.vignette {
     max-height: 150px;
     height: 100%;

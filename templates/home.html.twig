@@ -40,7 +40,7 @@
 							<li class="grid-item wow animate__fadeInUp" data-wow-delay="{{loop.index * 0.2}}s">
 								<figure>
 									<div class="blog-img bg-extra-dark-gray">
-										<a href="{{ path("trick_show", {slug: trick.slug}) }}"><img src="https://images.unsplash.com/photo-1495469552678-d0fb77903866?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=387&q=80" alt=""></a>
+										<a href="{{ path("trick_show", {slug: trick.slug}) }}"><img src="{{ asset('uploads/' ~ trick.mainImage.name) }}" alt=""></a>
 									</div>
 									<figcaption>
 										<div class="portfolio-hover-main text-start">

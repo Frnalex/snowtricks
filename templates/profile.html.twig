@@ -11,7 +11,7 @@
 			<div class="row justify-content-center">
 				<div class="col-12 col-lg-7 text-center margin-100px-bottom sm-margin-40px-bottom">
 					<div class='mb-5 profile-picture'>
-						<img class='border-radius-100 ' src="{{ asset('uploads/' ~ app.user.profilePicture.name) }}" alt="{{app.user.profilePicture.alt}}">
+						<img class='border-radius-100' src="{{ asset('uploads/' ~ app.user.profilePicture.name) }}" alt="{{app.user.profilePicture.alt}}">
 					</div>
 					<div class="position-relative overflow-hidden w-100">
 						<span class="text-large text-outside-line-full alt-font font-weight-600 text-uppercase">Profil de
@@ -48,20 +48,20 @@
 
 
 	{# <h1>Page de profil</h1>
-									
-										{% if app.user.profilePicture %}
-											<h2>Photo de profil</h2>
-											<img src="{{ asset('uploads/' ~ app.user.profilePicture.name) }}" alt="{{app.user.profilePicture.alt}}">
-										{% endif %}
-									
-										{{ form_start(imageForm) }}
-									
-										{{ form_widget(imageForm._token)}}
-									
-										{{ form_row(imageForm.file) }}
-									
-										<button type="submit">Envoyer</button>
-									
-										{{ form_end(imageForm, {render_rest: false}) }} #}
+										
+											{% if app.user.profilePicture %}
+												<h2>Photo de profil</h2>
+												<img src="{{ asset('uploads/' ~ app.user.profilePicture.name) }}" alt="{{app.user.profilePicture.alt}}">
+											{% endif %}
+										
+											{{ form_start(imageForm) }}
+										
+											{{ form_widget(imageForm._token)}}
+										
+											{{ form_row(imageForm.file) }}
+										
+											<button type="submit">Envoyer</button>
+										
+											{{ form_end(imageForm, {render_rest: false}) }} #}
 
 {% endblock %}
