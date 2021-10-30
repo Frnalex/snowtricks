@@ -81,7 +81,7 @@ class AppFixtures extends Fixture
                     $manager->persist($image);
                 }
 
-                for ($co = 1; $co <= mt_rand(2, 5); ++$co) {
+                for ($co = 1; $co <= mt_rand(10, 15); ++$co) {
                     $comment = new Comment();
                     $comment
                         ->setContent($faker->paragraph())
