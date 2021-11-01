@@ -21,9 +21,6 @@ class TrickType extends AbstractType
         $builder
             ->add('name', TextType::class, [
                 'label' => 'Nom',
-                'attr' => [
-                    'placeholder' => 'Tapez le nom du trick',
-                ],
             ])
             ->add('description', TextareaType::class, [
                 'label' => 'Description',
@@ -37,7 +34,6 @@ class TrickType extends AbstractType
                 'class' => Category::class,
                 'choice_label' => 'name',
                 'invalid_message' => "Cette catégorie n'est pas valide",
-                'required' => false,
             ])
             ->add('mainImage', ImageType::class, [
                 'label' => 'Image de couverture',
@@ -82,6 +78,9 @@ class TrickType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Trick::class,
+            'attr' => [
+                'novalidate' => 'novalidate',
+            ],
         ]);
     }
 }

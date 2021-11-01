@@ -13,17 +13,17 @@ class ForgotPasswordType extends AbstractType
     {
         $builder
             ->add('email', EmailType::class, [
-                'label' => 'Email',
-                'attr' => [
-                    'placeholder' => 'adresse@email.com',
-                ],
-                'required' => false,
+                'label' => 'Votre email',
             ])
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults([]);
+        $resolver->setDefaults([
+            'attr' => [
+                'novalidate' => 'novalidate',
+            ],
+        ]);
     }
 }

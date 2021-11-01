@@ -16,16 +16,10 @@ class RegistrationFormType extends AbstractType
         $builder
             ->add('username', TextType::class, [
                 'label' => "Nom d'utilisateur",
-                'attr' => [
-                    'placeholder' => "Nom d'utilisateur",
-                ],
                 'required' => false,
             ])
             ->add('email', EmailType::class, [
                 'label' => 'Email',
-                'attr' => [
-                    'placeholder' => 'adresse@email.com',
-                ],
                 'required' => false,
             ])
             ->add('password', RepeatedPasswordType::class)
@@ -36,6 +30,9 @@ class RegistrationFormType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => User::class,
+            'attr' => [
+                'novalidate' => 'novalidate',
+            ],
         ]);
     }
 }

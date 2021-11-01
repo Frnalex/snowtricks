@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\CommentRepository;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @var CommentRepository
@@ -21,6 +22,7 @@ class Comment
 
     /**
      * @ORM\Column(type="text")
+     * @Assert\NotBlank(message="Ce champ ne peut pas être vide")
      */
     private string $content;
 
@@ -34,7 +36,7 @@ class Comment
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private Trick $trick;
-  
+
     /**
      * @ORM\ManyToOne(targetEntity=User::class)
      * @ORM\JoinColumn(nullable=false)

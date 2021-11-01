@@ -1,26 +1,61 @@
 {{ form_widget(trickForm._token)}}
 
-{{ form_row(trickForm.name) }}
-{{ form_row(trickForm.description) }}
-{{ form_row(trickForm.category) }}
-{{ form_row(trickForm.mainImage) }}
-
-{{ form_errors(trickForm.videos) }}
-<button type="button" id='js-new-video' class='js-btn-new' data-collection='#videos'>Ajouter une vidéo</button>
-<div id='videos' data-prototype='{{ include("trick/_video.html.twig", {form: trickForm.videos.vars.prototype})|e("html_attr")}}' data-index='{{ trickForm.videos|length > 0 ? trickForm.videos|last.vars.name + 1 : 0 }}'>
-	{% for video in trickForm.videos %}
-		<div>
-			{{ include("trick/_video.html.twig", {form: video}) }}
-		</div>
-	{% endfor %}
+<div>
+	{{ form_label(trickForm.name) }}
+	<div class="text-danger">
+		{{ form_errors(trickForm.name) }}
+	</div>
+	{{ form_widget(trickForm.name) }}
+</div>
+<div>
+	{{ form_label(trickForm.description) }}
+	<div class="text-danger">
+		{{ form_errors(trickForm.description) }}
+	</div>
+	{{ form_widget(trickForm.description) }}
+</div>
+<div>
+	{{ form_label(trickForm.category) }}
+	<div class="text-danger">
+		{{ form_errors(trickForm.category) }}
+	</div>
+	{{ form_widget(trickForm.category) }}
 </div>
 
-{{ form_errors(trickForm.images) }}
-<button type="button" id='js-new-image' class='js-btn-new' data-collection='#images'>Ajouter une image</button>
-<div id='images' data-prototype='{{ include("trick/_image.html.twig", {form: trickForm.images.vars.prototype})|e("html_attr")}}' data-index='{{ trickForm.images|length > 0 ? trickForm.images|last.vars.name + 1 : 0 }}'>
-	{% for image in trickForm.images %}
-		<div>
-			{{ include("trick/_image.html.twig", {form: image}) }}
-		</div>
-	{% endfor %}
+<div>
+	{{ form_label(trickForm.mainImage.file, 'Image de couverture') }}
+	<div class="text-danger">
+		{{ form_errors(trickForm.mainImage.file) }}
+	</div>
+	{{ form_widget(trickForm.mainImage.file) }}
+</div>
+
+<div class="bg-light-gray p-5 mb-3">
+	{{ form_errors(trickForm.videos) }}
+	<div id='videos' data-prototype='{{ include("trick/_videoForm.html.twig", {form: trickForm.videos.vars.prototype})|e("html_attr")}}' data-index='{{ trickForm.videos|length > 0 ? trickForm.videos|last.vars.name + 1 : 0 }}'>
+		{% for video in trickForm.videos %}
+			<div>
+				{{ include("trick/_videoForm.html.twig", {'form': video}) }}
+			</div>
+		{% endfor %}
+	</div>
+	<div class="d-flex align-items-center flex-column mb-2">
+		<button type="button" id='js-new-video' class='js-btn-new btn btn-small border-radius-4 btn-black' data-collection='#videos'>Ajouter une vidéo</button>
+	</div>
+</div>
+
+<div class="bg-light-gray p-5 mb-5">
+
+
+	<div class='row'>
+		{% for image in trickForm.images %}
+			{% include 'trick/_image.html.twig' with {'path':trick.images[loop.index - 1].name, 'form': image} %}
+		{% endfor %}
+	</div>
+
+	<div id='images' data-prototype="{{ include('trick/_imageForm.html.twig', {form: trickForm.images.vars.prototype})|e('html_attr')}}" data-index='{{ trickForm.images|length > 0 ? trickForm.images|last.vars.name + 1 : 0 }}'></div>
+	{{ form_errors(trickForm.images) }}
+	<div class="d-flex align-items-center flex-column">
+		<button type="button" id='js-new-image' class='js-btn-new btn btn-small border-radius-4 btn-black' data-collection='#images'>Ajouter une image</button>
+	</div>
 </div>

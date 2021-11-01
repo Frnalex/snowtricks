@@ -1,0 +1,34 @@
+body {
+    padding-top: 72px;
+}
+
+ul {
+    margin-bottom: 0;
+    list-style: none;
+    padding: 0;
+}
+
+.profile-picture {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.profile-picture img {
+    object-fit: cover;
+    width: 150px;
+    height: 150px;
+}
+
+.img-small {
+    width: 50px !important;
+    height: 50px !important;
+    object-fit: cover;
+}
+
+img.vignette {
+    max-height: 150px;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    display: block;
+}

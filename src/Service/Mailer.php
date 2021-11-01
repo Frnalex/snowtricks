@@ -24,8 +24,6 @@ class Mailer
             ->from(new Address('admin@snowtricks.com', 'Snowtricks'))
             ->to(new Address($email))
             ->subject('Veuillez confirmer votre email')
-
-            // path of the Twig template to render
             ->htmlTemplate('authentication/confirmation_email.html.twig')
 
             // pass variables to the template
@@ -43,8 +41,6 @@ class Mailer
             ->from(new Address('admin@snowtricks.com', 'Snowtricks'))
             ->to(new Address($email))
             ->subject('Modification de votre mot de passe')
-
-            // path of the Twig template to render
             ->htmlTemplate('authentication/forgot_password_email.html.twig')
 
             // pass variables to the template

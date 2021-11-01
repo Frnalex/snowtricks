@@ -15,6 +15,10 @@ class VideoType extends AbstractType
         $builder->add('url', UrlType::class, [
             'required' => false,
             'empty_data' => '',
+            'attr' => [
+                'placeholder' => 'https://www.youtube.com/embed/t705_V-RDcQ',
+                'class' => 'form-control',
+            ],
         ]);
     }
 

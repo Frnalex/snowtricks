@@ -20,6 +20,9 @@ class ImageType extends AbstractType
             ->add('file', FileType::class, [
                 'label' => 'image',
                 'required' => false,
+                'attr' => [
+                    'class' => 'form-control',
+                ],
             ])
         ;
     }

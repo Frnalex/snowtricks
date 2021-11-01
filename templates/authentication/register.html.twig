@@ -5,26 +5,66 @@
 {% endblock %}
 
 {% block body %}
-	{% for flashSuccess in app.flashes('verify_email_error') %}
-		<p>{{ flashSuccess }}</p>
-	{% endfor %}
 
-	<h1>Inscription</h1>
+	<section class="wow animate__fadeIn bg-light-gray">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-12 col-lg-7 text-center margin-100px-bottom sm-margin-40px-bottom">
+					<div class="position-relative overflow-hidden w-100">
+						<span class="text-large text-outside-line-full alt-font font-weight-600 text-uppercase">Inscription</span>
+					</div>
+				</div>
+				{% for flashSuccess in app.flashes('verify_email_error') %}
+					<p>{{ flashSuccess }}</p>
+				{% endfor %}
+			</div>
 
-	{{ form_start(registrationForm) }}
+			{{ form_start(registrationForm) }}
+			<div class="row justify-content-center">
+				<div class="col-12 col-lg-6 wow animate__fadeIn">
+					<div class="padding-fifteen-all bg-white border-radius-6 lg-padding-seven-all">
+						<div>
+							{{ form_label(registrationForm.username) }}
+							<div class="text-danger">
+								{{ form_errors(registrationForm.username) }}
+							</div>
+							{{ form_widget(registrationForm.username) }}
+						</div>
+						<div>
+							{{ form_label(registrationForm.email) }}
+							<div class="text-danger">
+								{{ form_errors(registrationForm.email) }}
+							</div>
+							{{ form_widget(registrationForm.email) }}
+						</div>
+						<div>
+							{{ form_label(registrationForm.password.first) }}
+							<div class="text-danger">
+								{{ form_errors(registrationForm.password.first) }}
+							</div>
+							{{ form_widget(registrationForm.password.first) }}
+						</div>
+						<div>
+							{{ form_label(registrationForm.password.second) }}
+							<div class="text-danger">
+								{{ form_errors(registrationForm.password.second) }}
+							</div>
+							{{ form_widget(registrationForm.password.second) }}
+						</div>
 
-
-	<div>
-		{{ form_row(registrationForm.username) }}
-	</div>
-	<div>
-		{{ form_row(registrationForm.email) }}
-	</div>
-	<div>
-		{{ form_row(registrationForm.password) }}
-	</div>
-
-	<button type="submit" class="btn">Register</button>
-
-	{{ form_end(registrationForm) }}
+						<div class="d-flex align-items-center flex-column">
+							<button type="submit" class="btn btn-small border-radius-4 btn-black mb-2">Inscription</button>
+							<p>
+								Déjà inscrit ?
+								<strong>
+									<a href="{{ path("auth_login") }}">Connectez-vous</a>
+								</strong>
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			{{ form_end(registrationForm) }}
+		</div>
+	</section>
 {% endblock %}

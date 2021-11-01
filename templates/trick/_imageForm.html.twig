@@ -1,0 +1,19 @@
+<div class='bg-white p-3 mb-2'>
+
+	<div>
+		<div class="text-danger">
+			{{ form_errors(form.file) }}
+		</div>
+		{{ form_widget(form.file) }}
+	</div>
+
+	<div>
+		<div class="text-danger">
+			{{ form_errors(form.alt) }}
+		</div>
+		{{ form_label(form.alt, 'texte alternatif') }}
+		{{ form_widget(form.alt) }}
+	</div>
+
+	<button type="button" class='js-btn-remove btn btn-very-small border-radius-4 btn-danger w-100'>Supprimer</button>
+</div>

@@ -15,17 +15,9 @@ class LoginType extends AbstractType
         $builder
             ->add('email', EmailType::class, [
                 'label' => 'Email',
-                'attr' => [
-                    'placeholder' => 'adresse@email.com',
-                ],
-                'required' => false,
             ])
             ->add('password', PasswordType::class, [
                 'label' => 'Mot de passe',
-                'attr' => [
-                    'placeholder' => 'Mot de passe',
-                ],
-                'required' => false,
             ])
         ;
     }
@@ -33,7 +25,9 @@ class LoginType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            // Configure your form options here
+            'attr' => [
+                'novalidate' => 'novalidate',
+            ],
         ]);
     }
 }
