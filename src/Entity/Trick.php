@@ -32,7 +32,7 @@ class Trick
      *      maxMessage = "Le nom doit faire maximum {{ limit }} caractères"
      * )
      */
-    private ?string $name = '';
+    private string $name;
 
     /**
      * @ORM\Column(type="text", nullable=true)
@@ -42,7 +42,7 @@ class Trick
      *      minMessage = "La description doit faire au moins {{ limit }} caractères",
      * )
      */
-    private ?string $description = '';
+    private string $description;
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
@@ -64,19 +64,37 @@ class Trick
      * @ORM\JoinColumn(nullable=false)
      * @Assert\NotNull(message="Vous devez choisir une catégorie")
      */
-    private ?Category $category;
+    private Category $category;
 
     /**
      * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="trick", orphanRemoval=true)
      * @ORM\OrderBy({"createdAt" = "DESC"})
      */
-
     private Collection $comments;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Video::class, mappedBy="trick", orphanRemoval=true, cascade={"persist"})
+     * @Assert\Valid
+     */
+    private Collection $videos;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Image::class, mappedBy="trick", orphanRemoval=true, cascade={"persist"})
+     * @Assert\Valid
+     */
+    private Collection $images;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Image::class, orphanRemoval=true, cascade={"persist", "remove"})
+     */
+    private ?Image $mainImage = null;
 
     public function __construct()
     {
         $this->comments = new ArrayCollection();
         $this->createdAt = new DateTime();
+        $this->videos = new ArrayCollection();
+        $this->images = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -155,5 +173,77 @@ class Trick
     public function getComments(): Collection
     {
         return $this->comments;
+    }
+
+    /**
+     * @return Collection|Video[]
+     */
+    public function getVideos(): Collection
+    {
+        return $this->videos;
+    }
+
+    public function addVideo(Video $video): self
+    {
+        if (!$this->videos->contains($video)) {
+            $this->videos->add($video);
+            $video->setTrick($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVideo(Video $video): self
+    {
+        if ($this->videos->removeElement($video)) {
+            // set the owning side to null (unless already changed)
+            if ($video->getTrick() === $this) {
+                $video->setTrick(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Image[]
+     */
+    public function getImages(): Collection
+    {
+        return $this->images;
+    }
+
+    public function addImage(Image $image): self
+    {
+        if (!$this->images->contains($image)) {
+            $this->images->add($image);
+            $image->setTrick($this);
+        }
+
+        return $this;
+    }
+
+    public function removeImage(Image $image): self
+    {
+        if ($this->images->removeElement($image)) {
+            // set the owning side to null (unless already changed)
+            if ($image->getTrick() === $this) {
+                $image->setTrick(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getMainImage(): ?Image
+    {
+        return $this->mainImage;
+    }
+
+    public function setMainImage(?Image $mainImage): self
+    {
+        $this->mainImage = $mainImage;
+
+        return $this;
     }
 }

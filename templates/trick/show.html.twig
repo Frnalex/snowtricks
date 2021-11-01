@@ -23,6 +23,22 @@
 		{{ trick.category.name }}
 	</p>
 
+	{% if trick.mainImage %}
+		<h2>Photo de couverture</h2>
+		<img src={{ asset('uploads/' ~ trick.mainImage.name) }} alt={{trick.mainImage.alt}}>
+	{% endif %}
+
+
+	<h2>Videos</h2>
+	{% for video in trick.videos %}
+		<iframe width="420" height="315" src={{ video.url }}></iframe>
+	{% endfor %}
+
+	<h2>Images</h2>
+	{% for image in trick.images %}
+		<img src={{ asset('uploads/' ~ image.name) }} alt={{image.alt}}>
+	{% endfor %}
+
 	<hr/>
 
 

@@ -2,9 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Image;
 use App\Entity\Trick;
 use App\Form\CommentType;
 use App\Form\TrickType;
+use App\Service\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,16 +16,17 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 
 class TrickController extends AbstractController
 {
-
     private $em;
+    private $fileUploader;
 
-    public function __construct(EntityManagerInterface $em)
+    public function __construct(EntityManagerInterface $em, FileUploader $fileUploader)
     {
         $this->em = $em;
+        $this->fileUploader = $fileUploader;
     }
 
     /**
-     * @Route("/{slug}", name="trick_show")
+     * @Route("/{slug}", name="trick_show", priority=-1)
      */
     public function show(Trick $trick, Request $request)
     {
@@ -67,6 +70,7 @@ class TrickController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $trick = $form->getData();
             $trick->setSlug($slugger->slug($trick->getName())->lower());
+            $this->uploadImages($trick);
 
             $this->em->persist($trick);
             $this->em->flush();
@@ -94,6 +98,9 @@ class TrickController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $trick->setSlug($slugger->slug($trick->getName())->lower());
             $trick->setUpdatedAt(new \DateTime());
+
+            $this->uploadImages($trick);
+
             $this->em->flush();
 
             return $this->redirectToRoute('trick_show', [
@@ -119,5 +126,23 @@ class TrickController extends AbstractController
         $this->addFlash('trick_delete_success', 'Le trick a bien été supprimé de la base de donnée');
 
         return $this->redirectToRoute('homepage');
+    }
+
+    private function uploadImages(Trick $trick)
+    {
+        /** @var Image */
+        $mainImage = $trick->getMainImage();
+        if (null !== $mainImage->getFile()) {
+            $path = $this->fileUploader->upload($mainImage->getFile());
+            $mainImage->setName($path);
+        }
+
+        /** @var Image $image */
+        foreach ($trick->getImages() as $image) {
+            if (null !== $image->getFile()) {
+                $path = $this->fileUploader->upload($image->getFile());
+                $image->setName($path);
+            }
+        }
     }
 }

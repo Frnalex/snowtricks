@@ -4,6 +4,9 @@
 	<ul>
 		{% if app.user %}
 			<li>
+				<a href="{{ path("user_profile") }}">Profil</a>
+			</li>
+			<li>
 				<a href="{{ path("auth_logout") }}">Logout</a>
 			</li>
 		{% else %}
