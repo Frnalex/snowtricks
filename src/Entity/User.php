@@ -61,6 +61,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \Serial
      */
     private ?Image $profilePicture = null;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private ?string $tokenVerification = null;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $tokenForgotPassword;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -187,7 +197,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \Serial
             $this->id,
             $this->email,
             $this->password,
-            $this->username
+            $this->username,
         ]);
     }
 
@@ -199,5 +209,29 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \Serial
             $this->password,
             $this->username
         ) = unserialize($serialized);
+    }
+
+    public function getTokenVerification(): ?string
+    {
+        return $this->tokenVerification;
+    }
+
+    public function setTokenVerification(?string $tokenVerification): self
+    {
+        $this->tokenVerification = $tokenVerification;
+
+        return $this;
+    }
+
+    public function getTokenForgotPassword(): ?string
+    {
+        return $this->tokenForgotPassword;
+    }
+
+    public function setTokenForgotPassword(?string $tokenForgotPassword): self
+    {
+        $this->tokenForgotPassword = $tokenForgotPassword;
+
+        return $this;
     }
 }

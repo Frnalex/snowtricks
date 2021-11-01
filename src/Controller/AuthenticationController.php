@@ -3,29 +3,21 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Form\ForgotPasswordType;
 use App\Form\LoginType;
-use App\Form\RegistrationFormType;
+use App\Form\RepeatedPasswordType;
 use App\Repository\UserRepository;
-use App\Security\EmailVerifier;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use App\Service\Mailer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mime\Address;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
-use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
 class AuthenticationController extends AbstractController
 {
-    private $emailVerifier;
-
-    public function __construct(EmailVerifier $emailVerifier)
-    {
-        $this->emailVerifier = $emailVerifier;
-    }
-
     /**
      * @Route("/login", name="auth_login")
      */
@@ -47,76 +39,69 @@ class AuthenticationController extends AbstractController
     }
 
     /**
-     * @Route("/register", name="auth_register")
+     * @Route("/forgot-password", name="auth_forgot_password")
      */
-    public function register(Request $request, UserPasswordHasherInterface $hasher): Response
+    public function forgotPassword(Request $request, UserRepository $userRepository, TokenGeneratorInterface $tokenGenerator, Mailer $mailer)
     {
-        $user = new User();
-        $form = $this->createForm(RegistrationFormType::class, $user);
+        $form = $this->createForm(ForgotPasswordType::class);
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // encode the plain password
-            $user->setPassword(
-                $hasher->hashPassword(
-                    $user,
-                    $form->get('password')->getData()
-                )
-            );
+            $user = $userRepository->findOneBy([
+                'email' => $form['email']->getData(),
+            ]);
 
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($user);
-            $entityManager->flush();
+            if (!$user) {
+                $this->addFlash('error', "Aucun utilisateur n'est enregisté avec cette adresse");
 
-            // generate a signed url and email it to the user
-            $this->emailVerifier->sendEmailConfirmation(
-                'auth_verify_email',
-                $user,
-                (new TemplatedEmail())
-                    ->from(new Address('admin@snowtricks.com', 'Snowtricks'))
-                    ->to($user->getEmail())
-                    ->subject('Veuillez confirmer votre email')
-                    ->htmlTemplate('authentication/confirmation_email.html.twig')
-            );
-            // do anything else you need here, like send an email
+                return $this->redirectToRoute('auth_forgot_password');
+            }
 
-            return $this->redirectToRoute('homepage');
+            $user->setTokenForgotPassword($tokenGenerator->generateToken());
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($user);
+            $em->flush();
+
+            $mailer->sendForgotPasswordEmail($user->getEmail(), $user->getTokenForgotPassword());
+
+            $this->addFlash('success', 'Un email vous a été envoyé pour redéfinir votre mot de passe');
+
+            return $this->redirectToRoute('auth_forgot_password');
         }
 
-        return $this->render('authentication/register.html.twig', [
-            'registrationForm' => $form->createView(),
+        return $this->render('authentication/forgot_password.html.twig', [
+            'form' => $form->createView(),
         ]);
     }
 
     /**
-     * @Route("/verify/email", name="auth_verify_email")
+     * @Route("/reset-password/{tokenForgotPassword}", name="auth_reset_password")
      */
-    public function verifyUserEmail(Request $request, UserRepository $userRepository): Response
+    public function resetPassword(User $user, Request $request, UserPasswordHasherInterface $hasher): Response
     {
-        $id = $request->get('id');
+        $form = $this->createForm(RepeatedPasswordType::class);
 
-        if (null === $id) {
-            return $this->redirectToRoute('auth_register');
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $user->setPassword(
+                $hasher->hashPassword($user, $form->getData())
+            );
+            $user->setTokenForgotPassword(null);
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($user);
+            $em->flush();
+
+            $this->addFlash('success', 'Le mot de passe a bien été réinitialisé');
+
+            return $this->redirectToRoute('auth_login');
         }
 
-        $user = $userRepository->find($id);
-
-        if (null === $user) {
-            return $this->redirectToRoute('auth_register');
-        }
-
-        // validate email confirmation link, sets User::isVerified=true and persists
-        try {
-            $this->emailVerifier->handleEmailConfirmation($request, $user);
-        } catch (VerifyEmailExceptionInterface $exception) {
-            $this->addFlash('verify_email_error', $exception->getReason());
-
-            return $this->redirectToRoute('auth_register');
-        }
-
-        // @TODO Change the redirect on success and handle or remove the flash message in your templates
-        $this->addFlash('verify_email_success', 'Votre email a bien été vérifié');
-
-        return $this->redirectToRoute('homepage');
+        return $this->render('authentication/reset_password.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 }

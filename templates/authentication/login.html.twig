@@ -5,6 +5,14 @@
 {% endblock %}
 
 {% block body %}
+
+	{% for flashSuccess in app.flashes('verify_email_success') %}
+		<p>{{ flashSuccess }}</p>
+	{% endfor %}
+	{% for flashSuccess in app.flashes('verify_email_sent') %}
+		<p>{{ flashSuccess }}</p>
+	{% endfor %}
+
 	<h1>Connexion</h1>
 
 	{{ form_start(loginForm) }}
@@ -20,6 +28,10 @@
 	<div>
 		{{ form_row(loginForm.password) }}
 	</div>
+
+	<p>
+		<a href="{{ path("auth_forgot_password") }}">Mot de passe oublié ?</a>
+	</p>
 
 	<button type="submit">Connexion</button>
 
