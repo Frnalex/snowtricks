@@ -4,8 +4,14 @@
 {% endblock %}
 {% block body %}
 
+	{% if trick.mainImage %}
+		{% set mainImage = asset('uploads/' ~ trick.mainImage.name) %}
+	{% else %}
+		{% set mainImage = asset('images/default-trick.png') %}
+	{% endif %}
+
 	<!-- start page title section -->
-	<section class="wow animate__fadeIn cover-background background-position-top" style="background-image:url('{{ asset('uploads/' ~ trick.mainImage.name) }}');">
+	<section class="wow animate__fadeIn cover-background background-position-top" style="background-image:url('{{ mainImage }}');">
 		<div class="opacity-medium bg-extra-dark-gray"></div>
 		<div class="container position-relative">
 			<div class="row align-items-center">
@@ -134,7 +140,13 @@
 								<li>
 									<div class="d-block d-md-flex w-100">
 										<div class="w-110px sm-w-50px text-center sm-margin-10px-bottom">
-											<img src="{{ asset('uploads/' ~ comment.user.profilePicture.name) }}" class="img-small border-radius-100 w-85 sm-w-100" alt=""/>
+
+											{% if comment.user.profilePicture %}
+												<img src="{{ asset('uploads/' ~ comment.user.profilePicture.name) }}" class="img-small border-radius-100 w-85 sm-w-100" alt=""/>
+											{% else %}
+												<img src="{{ asset('images/default-profile.png') }}" class="img-small border-radius-100 w-85 sm-w-100" alt=""/>
+											{% endif %}
+
 										</div>
 										<div class="w-100 padding-40px-left last-paragraph-no-margin sm-no-padding-left">
 											<p class="mb-0 text-extra-dark-gray text-uppercase alt-font font-weight-600 text-small">{{comment.user.userIdentifier }}</p>

@@ -38,15 +38,11 @@ class AppFixtures extends Fixture
 
             $hash = $this->hasher->hashPassword($user, 'password');
 
-            $profilePicture = new Image();
-            $profilePicture->setName('default-profile.png');
-
             $user
                 ->setEmail("user{$u}@gmail.com")
                 ->setPassword($hash)
                 ->setUsername($faker->userName())
                 ->setIsVerified(true)
-                ->setProfilePicture($profilePicture)
             ;
 
             $users[] = $user;
@@ -63,16 +59,12 @@ class AppFixtures extends Fixture
             $manager->persist($category);
 
             for ($t = 1; $t <= mt_rand(3, 10); ++$t) {
-                $mainImage = new Image();
-                $mainImage->setName('default-trick.png');
-
                 $trick = new Trick();
                 $trick
                     ->setName($faker->sentence(3))
                     ->setDescription($faker->paragraph())
                     ->setSlug($this->slugger->slug($trick->getName())->lower())
                     ->setCategory($category)
-                    ->setMainImage($mainImage)
                 ;
                 $manager->persist($trick);
 

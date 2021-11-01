@@ -32,14 +32,21 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-12 blog-content">
-					<ul id='js-trick-list' class="blog-zoom-image blog-wrapper grid grid-3col xl-grid-3col lg-grid-3col md-grid-2col sm-grid-1col xs-grid-1col blog-post-style4 gutter-large">
+					<ul
+						id='js-trick-list' class="blog-zoom-image blog-wrapper grid grid-3col xl-grid-3col lg-grid-3col md-grid-2col sm-grid-1col xs-grid-1col blog-post-style4 gutter-large">
 
 						<!-- start blog post item -->
 						{% for trick in tricks %}
 							<li>
 								<figure>
 									<div class="blog-img bg-extra-dark-gray">
-										<a href="{{ path("trick_show", {slug: trick.slug}) }}"><img src="{{ asset('uploads/' ~ trick.mainImage.name) }}" alt=""></a>
+										<a href="{{ path("trick_show", {slug: trick.slug}) }}">
+											{% if trick.mainImage %}
+												<img class='border-radius-100' src="{{ asset('uploads/' ~ trick.mainImage.name) }}" alt="Photo du trick">
+											{% else %}
+												<img class='border-radius-100' src="{{ asset('images/default-trick.png') }}" alt="Photo de profil">
+											{% endif %}
+										</a>
 									</div>
 									<figcaption>
 										<div class="portfolio-hover-main text-start">
@@ -86,28 +93,26 @@
 	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 	<script>
 		const btnLoadMore = document.getElementById("js-load-more");
-		const OFFSET = 6;
-		let counter = 0;
-		const loadMoreTricks = (e) => {
-			e.preventDefault();
-			counter++;
-			const start = OFFSET * counter;
-			const url = "{{ path('loadMoreTricks') }}" + start;
-			
-			axios.get(url).then((response) => {
-				const data = response.data;
-				const frag = document.createRange().createContextualFragment(data);
-				const trickList = document.getElementById('js-trick-list');
-				trickList.append(frag);
+const OFFSET = 6;
+let counter = 0;
+const loadMoreTricks = (e) => {
+e.preventDefault();
+counter++;
+const start = OFFSET * counter;
+const url = "{{ path('loadMoreTricks') }}" + start;
 
-				if(start + OFFSET > {{total}}){
-					btnLoadMore.remove();
-				}
-			})
-			.catch((error) => {
-				console.log('Il y a eu un problème avec le fetch: ' + error.message);
-			});
-		}
-		btnLoadMore.addEventListener("click", loadMoreTricks);
+axios.get(url).then((response) => {
+const data = response.data;
+const frag = document.createRange().createContextualFragment(data);
+const trickList = document.getElementById('js-trick-list');
+trickList.append(frag);
+
+if (start + OFFSET > {{ total }}) {
+btnLoadMore.remove();
+}
+}).catch((error) => {
+console.log('Il y a eu un problème avec le fetch: ' + error.message);
+});
+} btnLoadMore.addEventListener("click", loadMoreTricks);
 	</script>
 {% endblock %}
