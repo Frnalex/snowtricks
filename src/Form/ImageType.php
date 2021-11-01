@@ -19,7 +19,7 @@ class ImageType extends AbstractType
             ])
             ->add('file', FileType::class, [
                 'label' => 'image',
-                'required' => false,
+                'required' => $options['file_required'],
                 'attr' => [
                     'class' => 'form-control',
                 ],
@@ -31,6 +31,7 @@ class ImageType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Image::class,
+            'file_required' => true,
         ]);
     }
 }

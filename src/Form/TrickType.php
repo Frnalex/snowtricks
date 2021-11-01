@@ -37,6 +37,7 @@ class TrickType extends AbstractType
             ])
             ->add('mainImage', ImageType::class, [
                 'label' => 'Image de couverture',
+                'file_required' => true
             ])
             ->add('videos', CollectionType::class, [
                 'entry_type' => VideoType::class,
@@ -51,6 +52,7 @@ class TrickType extends AbstractType
                 'allow_add' => true,
                 'allow_delete' => true,
                 'error_bubbling' => false,
+                'entry_options' => ['file_required' => false]
             ])
             ->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
                 $data = $event->getData();

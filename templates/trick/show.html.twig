@@ -159,9 +159,9 @@
 									{% endif %}
 
 
-									{% for i in 0 .. trick.comments|length / 5 %}
-										<li class="{% if (offset / 5) == i %}active{% endif %}" }>
-											<a href="{{ path('trick_show', { slug: trick.slug, offset: i * 5 }) }}#comments">{{ i + 1 }}</a>
+									{% for i in 1 .. (trick.comments|length / 5)|round(0,'ceil') %}
+										<li class="{% if (offset / 5) == i - 1 %}active{% endif %}" }>
+											<a href="{{ path('trick_show', { slug: trick.slug, offset: i * 5 - 5 }) }}#comments">{{ i }}</a>
 										</li>
 									{% endfor %}
 									{% if next < comments|length %}

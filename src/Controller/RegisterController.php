@@ -35,7 +35,7 @@ class RegisterController extends AbstractController
 
             $mailer->sendEmailVerification($user->getEmail(), $user->getTokenVerification());
 
-            $this->addFlash('verify_email_sent', 'Veuillez cliquer sur le lien de confirmation envoyé par email avant de vous connecter.');
+            $this->addFlash('info', 'Veuillez cliquer sur le lien de confirmation envoyé par email avant de vous connecter.');
 
             return $this->redirectToRoute('auth_login');
         }
@@ -50,20 +50,14 @@ class RegisterController extends AbstractController
      */
     public function verifyUserEmail(User $user): Response
     {
-        if ($user) {
             $user->setTokenVerification(null);
             $user->setIsVerified(true);
             $em = $this->getDoctrine()->getManager();
             $em->persist($user);
             $em->flush();
 
-            $this->addFlash('verify_email_success', 'Compte actif !');
+            $this->addFlash('success', 'Compte actif !');
 
             return $this->redirectToRoute('auth_login');
-        }
-
-        $this->addFlash('verify_email_error', "Ce compte n'exsite pas !");
-
-        return $this->redirectToRoute('auth_register');
     }
 }

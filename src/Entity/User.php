@@ -59,6 +59,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \Serial
 
     /**
      * @ORM\OneToOne(targetEntity=Image::class, cascade={"persist", "remove"})
+     * @Assert\NotNull(message="Vous devez choisir une image")
      */
     private ?Image $profilePicture = null;
 

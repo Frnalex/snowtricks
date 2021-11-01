@@ -14,13 +14,14 @@
 						<span class="text-large text-outside-line-full alt-font font-weight-600 text-uppercase">Connexion</span>
 					</div>
 				</div>
-				{% for flashSuccess in app.flashes('verify_email_success') %}
-					<p>{{ flashSuccess }}</p>
-				{% endfor %}
-				{% for flashSuccess in app.flashes('verify_email_sent') %}
-					<p>{{ flashSuccess }}</p>
-				{% endfor %}
 
+				{% for label, messages in app.flashes(['success', 'info']) %}
+					{% for message in messages %}
+						<div class="alert alert-{{ label }}">
+							{{ message }}
+						</div>
+					{% endfor %}
+				{% endfor %}
 
 			</div>
 

@@ -14,9 +14,15 @@
 						<span class="text-large text-outside-line-full alt-font font-weight-600 text-uppercase">Inscription</span>
 					</div>
 				</div>
-				{% for flashSuccess in app.flashes('verify_email_error') %}
-					<p>{{ flashSuccess }}</p>
+
+				{% for label, messages in app.flashes(['danger']) %}
+					{% for message in messages %}
+						<div class="alert alert-{{ label }}">
+							{{ message }}
+						</div>
+					{% endfor %}
 				{% endfor %}
+				
 			</div>
 
 			{{ form_start(registrationForm) }}
