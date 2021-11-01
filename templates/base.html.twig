@@ -26,12 +26,15 @@
 		{% block body %}{% endblock %}
 
 		{% include "/shared/_footer.html.twig" %}
+
 		{# JAVASCRIPT #}
-		<script type="text/javascript" src="/js/jquery.min.js"></script>
-		<script type="text/javascript" src="/js/bootsnav.js"></script>
-		<script type="text/javascript" src="/js/jquery.nav.js"></script>
-		<script type="text/javascript" src="/js/hamburger-menu.js"></script>
-		<script type="text/javascript" src="/js/theme-vendors.min.js"></script>
-		<script type="text/javascript" src="/js/main.js"></script>
+		{% block script %}
+			<script type="text/javascript" src="/js/jquery.min.js"></script>
+			<script type="text/javascript" src="/js/bootsnav.js"></script>
+			<script type="text/javascript" src="/js/jquery.nav.js"></script>
+			<script type="text/javascript" src="/js/hamburger-menu.js"></script>
+			<script type="text/javascript" src="/js/theme-vendors.min.js"></script>
+			<script type="text/javascript" src="/js/main.js"></script>
+		{% endblock %}
 	</body>
 </html>

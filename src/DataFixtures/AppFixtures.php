@@ -29,6 +29,8 @@ class AppFixtures extends Fixture
     {
         $faker = Factory::create('fr_FR');
 
+        $categories = ['Grab', 'Rotation', 'Flip', 'Slide', 'Old school'];
+
         $users = [];
 
         for ($u = 1; $u <= 5; ++$u) {
@@ -52,10 +54,10 @@ class AppFixtures extends Fixture
             $manager->persist($user);
         }
 
-        for ($c = 1; $c <= 3; ++$c) {
+        foreach ($categories as $c) {
             $category = new Category();
             $category
-                ->setName("Catégorie {$c}")
+                ->setName($c)
                 ->setSlug($this->slugger->slug($category->getName())->lower())
             ;
             $manager->persist($category);
@@ -66,7 +68,7 @@ class AppFixtures extends Fixture
 
                 $trick = new Trick();
                 $trick
-                    ->setName($faker->sentence())
+                    ->setName($faker->sentence(3))
                     ->setDescription($faker->paragraph())
                     ->setSlug($this->slugger->slug($trick->getName())->lower())
                     ->setCategory($category)

@@ -1,3 +1,4 @@
+// Collection
 const newItem = (e) => {
     const collectionHolder = document.querySelector(e.currentTarget.dataset.collection);
 
@@ -17,3 +18,4 @@ document.querySelectorAll(".js-btn-new").forEach((btn) => {
 document.querySelectorAll(".js-btn-remove").forEach((btn) => {
     btn.addEventListener("click", (e) => e.currentTarget.closest("div").remove());
 });
+
