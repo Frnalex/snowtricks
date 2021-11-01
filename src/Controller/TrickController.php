@@ -6,6 +6,7 @@ use App\Entity\Image;
 use App\Entity\Trick;
 use App\Form\CommentType;
 use App\Form\TrickType;
+use App\Repository\CommentRepository;
 use App\Service\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -28,8 +29,11 @@ class TrickController extends AbstractController
     /**
      * @Route("/{slug}", name="trick_show", priority=-1)
      */
-    public function show(Trick $trick, Request $request)
+    public function show(Trick $trick, Request $request, CommentRepository $commentRepository)
     {
+        $offset = max(0, $request->query->getInt('offset', 0));
+        $paginator = $commentRepository->getCommentPaginator($trick, $offset);
+
         $form = $this->createForm(CommentType::class);
 
         $form->handleRequest($request);
@@ -53,6 +57,10 @@ class TrickController extends AbstractController
 
         return $this->render('trick/show.html.twig', [
             'trick' => $trick,
+            'comments' => $paginator,
+            'offset' => $offset,
+            'previous' => $offset - CommentRepository::PAGINATOR_PER_PAGE,
+            'next' => min(count($paginator), $offset + CommentRepository::PAGINATOR_PER_PAGE),
             'commentForm' => $form->createView(),
         ]);
     }
