@@ -18,12 +18,14 @@ class HomeController extends AbstractController
 
         return $this->render('home.html.twig', [
             'tricks' => $tricks,
-            'total' => $total
+            'total' => $total,
         ]);
     }
 
     /**
      * @Route("/{offset}", name="loadMoreTricks", requirements={"offset": "\d+"})
+     *
+     * @param int $offset
      */
     public function loadMoreTricks(TrickRepository $trickRepository, $offset = 6)
     {

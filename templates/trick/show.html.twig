@@ -125,6 +125,7 @@
 						</div>
 					</div>
 
+
 					{# COMMENTS #}
 					<div class="col-12 blog-details-comments" id="comments">
 						<div class="w-100 mx-auto text-center margin-80px-tb md-margin-50px-tb sm-margin-30px-bottom">
@@ -162,23 +163,21 @@
 						<div class="col-12 text-center margin-100px-top md-margin-50px-top wow animate__fadeInUp">
 							<div class="pagination text-small text-uppercase text-extra-dark-gray">
 								<ul class="mx-auto">
-									{% if previous >= 0 %}
+									{% if page > 1 %}
 										<li>
-											<a href="{{ path('trick_show', { slug: trick.slug, offset: previous }) }}#comments">
+											<a href="{{ path('trick_show', { slug: trick.slug, page: page - 1 }) }}#comments">
 												<i class="fas fa-long-arrow-alt-left margin-5px-right d-none d-md-inline-block"></i>
 											</a>
 										</li>
 									{% endif %}
-
-
 									{% for i in 1 .. (trick.comments|length / 5)|round(0,'ceil') %}
-										<li class="{% if (offset / 5) == i - 1 %}active{% endif %}" }>
-											<a href="{{ path('trick_show', { slug: trick.slug, offset: i * 5 - 5 }) }}#comments">{{ i }}</a>
+										<li class="{% if (page) == i %}active{% endif %}" }>
+											<a href="{{ path('trick_show', { slug: trick.slug, page: i }) }}#comments">{{ i }}</a>
 										</li>
 									{% endfor %}
-									{% if next < comments|length %}
+									{% if page * 5 < comments|length %}
 										<li>
-											<a href="{{ path('trick_show', { slug: trick.slug, offset: next }) }}#comments">
+											<a href="{{ path('trick_show', { slug: trick.slug, page: page + 1 }) }}#comments">
 												<i class="fas fa-long-arrow-alt-right margin-5px-left d-none d-md-inline-block"></i>
 											</a>
 										</li>
