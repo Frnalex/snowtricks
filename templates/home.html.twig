@@ -93,26 +93,30 @@
 	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 	<script>
 		const btnLoadMore = document.getElementById("js-load-more");
-const OFFSET = 6;
-let counter = 0;
-const loadMoreTricks = (e) => {
-e.preventDefault();
-counter++;
-const start = OFFSET * counter;
-const url = "{{ path('loadMoreTricks') }}" + start;
+		console.log(btnLoadMore);
+		const OFFSET = 6;
+		let counter = 0;
 
-axios.get(url).then((response) => {
-const data = response.data;
-const frag = document.createRange().createContextualFragment(data);
-const trickList = document.getElementById('js-trick-list');
-trickList.append(frag);
+		const loadMoreTricks = (e) => {
+			e.preventDefault();
+			counter++;
+			const start = OFFSET * counter;
+			const url = "{{ path('loadMoreTricks') }}" + start;
 
-if (start + OFFSET > {{ total }}) {
-btnLoadMore.remove();
-}
-}).catch((error) => {
-console.log('Il y a eu un problème avec le fetch: ' + error.message);
-});
-} btnLoadMore.addEventListener("click", loadMoreTricks);
+			axios.get(url).then((response) => {
+				const data = response.data;
+				const frag = document.createRange().createContextualFragment(data);
+				const trickList = document.getElementById('js-trick-list');
+				trickList.append(frag);
+
+				if (start + OFFSET > {{ total }}) {
+					btnLoadMore.remove();
+				}
+			}).catch((error) => {
+				console.log('Il y a eu un problème avec le fetch: ' + error.message);
+			});
+		}
+
+		btnLoadMore.addEventListener("click", loadMoreTricks);
 	</script>
 {% endblock %}
