@@ -127,67 +127,71 @@
 
 
 					{# COMMENTS #}
-					<div class="col-12 blog-details-comments" id="comments">
-						<div class="w-100 mx-auto text-center margin-80px-tb md-margin-50px-tb sm-margin-30px-bottom">
-							<div class="position-relative overflow-hidden w-100">
-								<span class="text-small text-outside-line-full alt-font font-weight-600 text-uppercase text-extra-dark-gray">
-									{{trick.comments|length}}
-									Commentaires
-								</span>
+					{% if comments|length > 0 %}
+						<div class="col-12 blog-details-comments" id="comments">
+							<div class="w-100 mx-auto text-center margin-80px-tb md-margin-50px-tb sm-margin-30px-bottom">
+								<div class="position-relative overflow-hidden w-100">
+									<span class="text-small text-outside-line-full alt-font font-weight-600 text-uppercase text-extra-dark-gray">
+										{{trick.comments|length}}
+										Commentaires
+									</span>
+								</div>
 							</div>
-						</div>
-						<ul class="blog-comment">
-							{% for comment in comments %}
-								<li>
-									<div class="d-block d-md-flex w-100">
-										<div class="w-110px sm-w-50px text-center sm-margin-10px-bottom">
+							<ul class="blog-comment">
+								{% for comment in comments %}
+									<li>
+										<div class="d-block d-md-flex w-100">
+											<div class="w-110px sm-w-50px text-center sm-margin-10px-bottom">
 
-											{% if comment.user.profilePicture %}
-												<img src="{{ asset('uploads/' ~ comment.user.profilePicture.name) }}" class="img-small border-radius-100 w-85 sm-w-100" alt=""/>
-											{% else %}
-												<img src="{{ asset('images/default-profile.png') }}" class="img-small border-radius-100 w-85 sm-w-100" alt=""/>
+												{% if comment.user.profilePicture %}
+													<img src="{{ asset('uploads/' ~ comment.user.profilePicture.name) }}" class="img-small border-radius-100 w-85 sm-w-100" alt=""/>
+												{% else %}
+													<img src="{{ asset('images/default-profile.png') }}" class="img-small border-radius-100 w-85 sm-w-100" alt=""/>
+												{% endif %}
+
+											</div>
+											<div class="w-100 padding-40px-left last-paragraph-no-margin sm-no-padding-left">
+												<p class="mb-0 text-extra-dark-gray text-uppercase alt-font font-weight-600 text-small">{{comment.user.userIdentifier }}</p>
+												<div class="text-small text-medium-gray text-uppercase margin-10px-bottom">{{comment.createdAt|date("d/m/Y")}}</div>
+												<p>{{ comment.content }}</p>
+											</div>
+										</div>
+									</li>
+								{% endfor %}
+							</ul>
+
+							<!-- start pagination -->
+							{% if comments|length > 5 %}
+								<div class="col-12 text-center margin-100px-top md-margin-50px-top wow animate__fadeInUp">
+									<div class="pagination text-small text-uppercase text-extra-dark-gray">
+										<ul class="mx-auto">
+											{% if page > 1 %}
+												<li>
+													<a href="{{ path('trick_show', { slug: trick.slug, page: page - 1 }) }}#comments">
+														<i class="fas fa-long-arrow-alt-left margin-5px-right d-none d-md-inline-block"></i>
+													</a>
+												</li>
 											{% endif %}
-
-										</div>
-										<div class="w-100 padding-40px-left last-paragraph-no-margin sm-no-padding-left">
-											<p class="mb-0 text-extra-dark-gray text-uppercase alt-font font-weight-600 text-small">{{comment.user.userIdentifier }}</p>
-											<div class="text-small text-medium-gray text-uppercase margin-10px-bottom">{{comment.createdAt|date("d/m/Y")}}</div>
-											<p>{{ comment.content }}</p>
-										</div>
+											{% for i in 1 .. (trick.comments|length / 5)|round(0,'ceil') %}
+												<li class="{% if (page) == i %}active{% endif %}" }>
+													<a href="{{ path('trick_show', { slug: trick.slug, page: i }) }}#comments">{{ i }}</a>
+												</li>
+											{% endfor %}
+											{% if page * 5 < comments|length %}
+												<li>
+													<a href="{{ path('trick_show', { slug: trick.slug, page: page + 1 }) }}#comments">
+														<i class="fas fa-long-arrow-alt-right margin-5px-left d-none d-md-inline-block"></i>
+													</a>
+												</li>
+											{% endif %}
+										</ul>
 									</div>
-								</li>
-							{% endfor %}
-						</ul>
+								</div>
+								<!-- end pagination -->
+							{% endif %}
 
-						<!-- start pagination -->
-						<div class="col-12 text-center margin-100px-top md-margin-50px-top wow animate__fadeInUp">
-							<div class="pagination text-small text-uppercase text-extra-dark-gray">
-								<ul class="mx-auto">
-									{% if page > 1 %}
-										<li>
-											<a href="{{ path('trick_show', { slug: trick.slug, page: page - 1 }) }}#comments">
-												<i class="fas fa-long-arrow-alt-left margin-5px-right d-none d-md-inline-block"></i>
-											</a>
-										</li>
-									{% endif %}
-									{% for i in 1 .. (trick.comments|length / 5)|round(0,'ceil') %}
-										<li class="{% if (page) == i %}active{% endif %}" }>
-											<a href="{{ path('trick_show', { slug: trick.slug, page: i }) }}#comments">{{ i }}</a>
-										</li>
-									{% endfor %}
-									{% if page * 5 < comments|length %}
-										<li>
-											<a href="{{ path('trick_show', { slug: trick.slug, page: page + 1 }) }}#comments">
-												<i class="fas fa-long-arrow-alt-right margin-5px-left d-none d-md-inline-block"></i>
-											</a>
-										</li>
-									{% endif %}
-								</ul>
-							</div>
 						</div>
-						<!-- end pagination -->
-
-					</div>
+					{% endif %}
 
 				</main>
 			</div>

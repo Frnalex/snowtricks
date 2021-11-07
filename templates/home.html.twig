@@ -6,11 +6,14 @@
 
 {% block body %}
 
-	{% for flashSuccess in app.flashes('verify_email_success') %}
-		<p>{{ flashSuccess }}</p>
-	{% endfor %}
-	{% for flashSuccess in app.flashes('trick_delete_success') %}
-		<p>{{ flashSuccess }}</p>
+	{% for label, messages in app.flashes(['success', 'danger']) %}
+		{% for message in messages %}
+			<div class="container">
+				<div class="alert alert-{{ label }}">
+					{{ message }}
+				</div>
+			</div>
+		{% endfor %}
 	{% endfor %}
 
 	<!-- start hero section -->
@@ -93,7 +96,6 @@
 	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 	<script>
 		const btnLoadMore = document.getElementById("js-load-more");
-		console.log(btnLoadMore);
 		const OFFSET = 6;
 		let counter = 0;
 
@@ -115,7 +117,7 @@
 			}).catch((error) => {
 				console.log('Il y a eu un problème avec le fetch: ' + error.message);
 			});
-		}
+		};
 
 		btnLoadMore.addEventListener("click", loadMoreTricks);
 	</script>

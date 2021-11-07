@@ -129,7 +129,7 @@ class TrickController extends AbstractController
         $this->em->remove($trick);
         $this->em->flush();
 
-        $this->addFlash('trick_delete_success', 'Le trick a bien été supprimé de la base de donnée');
+        $this->addFlash('success', 'Le trick a bien été supprimé de la base de donnée');
 
         return $this->redirectToRoute('homepage');
     }
