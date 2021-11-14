@@ -161,7 +161,7 @@
 							</ul>
 
 							<!-- start pagination -->
-							{% if comments|length > 5 %}
+							{% if comments|length > 10 %}
 								<div class="col-12 text-center margin-100px-top md-margin-50px-top wow animate__fadeInUp">
 									<div class="pagination text-small text-uppercase text-extra-dark-gray">
 										<ul class="mx-auto">
@@ -172,12 +172,12 @@
 													</a>
 												</li>
 											{% endif %}
-											{% for i in 1 .. (trick.comments|length / 5)|round(0,'ceil') %}
+											{% for i in 1 .. (trick.comments|length / 10)|round(0,'ceil') %}
 												<li class="{% if (page) == i %}active{% endif %}" }>
 													<a href="{{ path('trick_show', { slug: trick.slug, page: i }) }}#comments">{{ i }}</a>
 												</li>
 											{% endfor %}
-											{% if page * 5 < comments|length %}
+											{% if page * 10 < comments|length %}
 												<li>
 													<a href="{{ path('trick_show', { slug: trick.slug, page: page + 1 }) }}#comments">
 														<i class="fas fa-long-arrow-alt-right margin-5px-left d-none d-md-inline-block"></i>

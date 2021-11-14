@@ -9,6 +9,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Image as ConstraintsImage;
+use Symfony\Component\Validator\Constraints\NotNull;
 
 class ImageType extends AbstractType
 {
@@ -22,6 +23,7 @@ class ImageType extends AbstractType
                 'label' => 'image',
                 'required' => $options['file_required'],
                 'constraints' => [
+                    new NotNull(['message' => 'Vous devez choisir une image']),
                     new ConstraintsImage(),
                 ],
             ])

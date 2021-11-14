@@ -6,14 +6,11 @@ use App\Entity\User;
 use App\Form\ForgotPasswordType;
 use App\Form\LoginType;
 use App\Form\RepeatedPasswordType;
-use App\Repository\UserRepository;
-use App\Service\Mailer;
+use App\Handler\UserHandler;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class AuthenticationController extends AbstractController
@@ -41,34 +38,14 @@ class AuthenticationController extends AbstractController
     /**
      * @Route("/forgot-password", name="auth_forgot_password")
      */
-    public function forgotPassword(Request $request, UserRepository $userRepository, TokenGeneratorInterface $tokenGenerator, Mailer $mailer)
+    public function forgotPassword(Request $request, UserHandler $userHandler)
     {
         $form = $this->createForm(ForgotPasswordType::class);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $user = $userRepository->findOneBy([
-                'email' => $form['email']->getData(),
-            ]);
-
-            if (!$user) {
-                $this->addFlash('danger', "Aucun utilisateur n'est enregisté avec cette adresse");
-
-                return $this->redirectToRoute('auth_forgot_password');
-            }
-
-            $user->setTokenForgotPassword($tokenGenerator->generateToken());
-
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($user);
-            $em->flush();
-
-            $mailer->sendForgotPasswordEmail($user->getEmail(), $user->getTokenForgotPassword());
-
-            $this->addFlash('success', 'Un email vous a été envoyé pour redéfinir votre mot de passe');
-
-            return $this->redirectToRoute('auth_forgot_password');
+            $userHandler->forgotPassword($form['email']->getData());
         }
 
         return $this->render('authentication/forgot_password.html.twig', [
@@ -79,25 +56,14 @@ class AuthenticationController extends AbstractController
     /**
      * @Route("/reset-password/{tokenForgotPassword}", name="auth_reset_password")
      */
-    public function resetPassword(User $user, Request $request, UserPasswordHasherInterface $hasher): Response
+    public function resetPassword(User $user, Request $request, UserHandler $userHandler): Response
     {
         $form = $this->createForm(RepeatedPasswordType::class);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $user->setPassword(
-                $hasher->hashPassword($user, $form->getData())
-            );
-            $user->setTokenForgotPassword(null);
-
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($user);
-            $em->flush();
-
-            $this->addFlash('success', 'Le mot de passe a bien été réinitialisé');
-
-            return $this->redirectToRoute('auth_login');
+            $userHandler->resetPassword($user, $form->getData());
         }
 
         return $this->render('authentication/reset_password.html.twig', [
