@@ -10,25 +10,20 @@ use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
-class TrickHandler
+class TrickHandler extends AbstractHandler
 {
-    private $fileUploader;
-    private $em;
     private $slugger;
-    private $urlGenerator;
-    private $flashBag;
 
     public function __construct(
-        FileUploader $fileUploader,
-        EntityManagerInterface $em,
-        SluggerInterface $slugger,
         UrlGeneratorInterface $urlGenerator,
-        FlashBagInterface $flashBag
+        EntityManagerInterface $em,
+        FileUploader $fileUploader,
+        FlashBagInterface $flashBag,
+        SluggerInterface $slugger
     ) {
+        parent::__construct($urlGenerator, $em, $fileUploader, $flashBag);
         $this->fileUploader = $fileUploader;
-        $this->em = $em;
         $this->slugger = $slugger;
-        $this->urlGenerator = $urlGenerator;
         $this->flashBag = $flashBag;
     }
 
@@ -40,11 +35,9 @@ class TrickHandler
         $this->em->persist($trick);
         $this->em->flush();
 
-        $response = new RedirectResponse($this->urlGenerator->generate('trick_show', [
+        return $this->redirectTo('trick_show', [
             'slug' => $trick->getSlug(),
-        ]));
-
-        return $response->send();
+        ]);
     }
 
     public function edit($trick): RedirectResponse
@@ -56,11 +49,9 @@ class TrickHandler
 
         $this->em->flush();
 
-        $response = new RedirectResponse($this->urlGenerator->generate('trick_show', [
+        return $this->redirectTo('trick_show', [
             'slug' => $trick->getSlug(),
-        ]));
-
-        return $response->send();
+        ]);
     }
 
     public function delete($trick)
@@ -70,17 +61,13 @@ class TrickHandler
 
         $this->flashBag->add('success', 'Le trick a bien été supprimé de la base de donnée');
 
-        $response = new RedirectResponse($this->urlGenerator->generate('homepage'));
-
-        return $response->send();
+        return $this->redirectTo('homepage');
     }
 
     public function addComment($user, $comment, $trick): RedirectResponse
     {
         if (null === $user) {
-            $response = new RedirectResponse($this->urlGenerator->generate('auth_login'));
-
-            return $response->send();
+            return $this->redirectTo('auth_login');
         }
 
         $comment->setTrick($trick);
@@ -89,11 +76,9 @@ class TrickHandler
         $this->em->persist($comment);
         $this->em->flush();
 
-        $response = new RedirectResponse($this->urlGenerator->generate('trick_show', [
+        return $this->redirectTo('trick_show', [
             'slug' => $trick->getSlug(),
-        ]));
-
-        return $response->send();
+        ]);
     }
 
     private function uploadImages(Trick $trick)
