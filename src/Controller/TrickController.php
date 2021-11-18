@@ -7,8 +7,6 @@ use App\Form\CommentType;
 use App\Form\TrickType;
 use App\Handler\TrickHandler;
 use App\Repository\CommentRepository;
-use App\Service\FileUploader;
-use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,15 +14,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class TrickController extends AbstractController
 {
-    private $em;
-    private $fileUploader;
-
-    public function __construct(EntityManagerInterface $em, FileUploader $fileUploader)
-    {
-        $this->em = $em;
-        $this->fileUploader = $fileUploader;
-    }
-
     /**
      * @Route("/{slug}", name="trick_show", priority=-1)
      */
