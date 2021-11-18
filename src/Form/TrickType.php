@@ -51,14 +51,10 @@ class TrickType extends AbstractType
                 'allow_add' => true,
                 'allow_delete' => true,
                 'error_bubbling' => false,
+                'entry_options' => ['file_required' => false],
             ])
             ->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
                 $data = $event->getData();
-                // $mainImage = $data->getMainImage();
-
-                // if (null === $mainImage->getFile()) {
-                //     $data->removeImage($mainImage);
-                // }
 
                 foreach ($data->getVideos() as $video) {
                     if ('' === $video->getUrl()) {

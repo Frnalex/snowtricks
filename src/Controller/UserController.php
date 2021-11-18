@@ -2,11 +2,9 @@
 
 namespace App\Controller;
 
-use App\Entity\Image;
 use App\Entity\User;
 use App\Form\ImageType;
-use App\Service\FileUploader;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Handler\UserHandler;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,28 +16,14 @@ class UserController extends AbstractController
      * @Route("/profile", name="user_profile")
      * @IsGranted("ROLE_USER")
      */
-    public function profile(Request $request, FileUploader $fileUploader, EntityManagerInterface $em)
+    public function profile(Request $request, UserHandler $userHandler)
     {
         $form = $this->createForm(ImageType::class);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $user = $this->getUser();
-
-            /** @var Image */
-            $image = $form->getData();
-
-            if (null !== $image->getFile()) {
-                $path = $fileUploader->upload($image->getFile());
-                $image->setAlt('Photo de profil');
-                $image->setName($path);
-                $user->setProfilePicture($image);
-            }
-
-            $em->flush();
-
-            return $this->redirectToRoute('user_profile');
+            $userHandler->profilePicture($this->getUser(), $form);
         }
 
         return $this->render('profile.html.twig', [

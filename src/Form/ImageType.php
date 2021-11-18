@@ -8,6 +8,8 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Image as ConstraintsImage;
+use Symfony\Component\Validator\Constraints\NotNull;
 
 class ImageType extends AbstractType
 {
@@ -19,9 +21,10 @@ class ImageType extends AbstractType
             ])
             ->add('file', FileType::class, [
                 'label' => 'image',
-                'required' => false,
-                'attr' => [
-                    'class' => 'form-control',
+                'required' => $options['file_required'],
+                'constraints' => [
+                    new NotNull(['message' => 'Vous devez choisir une image']),
+                    new ConstraintsImage(),
                 ],
             ])
         ;
@@ -31,6 +34,7 @@ class ImageType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Image::class,
+            'file_required' => true,
         ]);
     }
 }

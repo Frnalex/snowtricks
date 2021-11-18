@@ -4,40 +4,25 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\RegistrationFormType;
-use App\Service\Mailer;
+use App\Handler\UserHandler;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
 
 class RegisterController extends AbstractController
 {
     /**
      * @Route("/register", name="auth_register")
      */
-    public function register(Request $request, UserPasswordHasherInterface $hasher, TokenGeneratorInterface $tokenGenerator, Mailer $mailer): Response
+    public function register(Request $request, UserHandler $userHandler): Response
     {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $user->setTokenVerification($tokenGenerator->generateToken());
-            $user->setPassword(
-                $hasher->hashPassword($user, $form->get('password')->getData())
-            );
-
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($user);
-            $em->flush();
-
-            $mailer->sendEmailVerification($user->getEmail(), $user->getTokenVerification());
-
-            $this->addFlash('verify_email_sent', 'Veuillez cliquer sur le lien de confirmation envoyé par email avant de vous connecter.');
-
-            return $this->redirectToRoute('auth_login');
+            $userHandler->register($user, $form->get('password')->getData());
         }
 
         return $this->render('authentication/register.html.twig', [
@@ -48,22 +33,8 @@ class RegisterController extends AbstractController
     /**
      * @Route("/verify-email/{tokenVerification}", name="auth_verify_email")
      */
-    public function verifyUserEmail(User $user): Response
+    public function verifyUserEmail(User $user, UserHandler $userHandler)
     {
-        if ($user) {
-            $user->setTokenVerification(null);
-            $user->setIsVerified(true);
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($user);
-            $em->flush();
-
-            $this->addFlash('verify_email_success', 'Compte actif !');
-
-            return $this->redirectToRoute('auth_login');
-        }
-
-        $this->addFlash('verify_email_error', "Ce compte n'exsite pas !");
-
-        return $this->redirectToRoute('auth_register');
+        $userHandler->verifyEmail($user);
     }
 }

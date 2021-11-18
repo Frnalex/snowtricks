@@ -18,18 +18,42 @@ class AppFixtures extends Fixture
 {
     protected $slugger;
     protected $hasher;
+    protected $categories;
 
     public function __construct(SluggerInterface $slugger, UserPasswordHasherInterface $hasher)
     {
         $this->slugger = $slugger;
         $this->hasher = $hasher;
+        $this->categories = [
+            'Grab' => [
+                'Mute' => 'saisie de la carre frontside de la planche entre les deux pieds avec la main avant',
+                'Melancholie' => 'saisie de la carre backside de la planche, entre les deux pieds, avec la main avant',
+                'Indy' => 'saisie de la carre frontside de la planche, entre les deux pieds, avec la main arrière',
+                'Stalefish' => 'saisie de la carre backside de la planche entre les deux pieds avec la main arrière',
+                'Tail grab' => 'saisie de la partie arrière de la planche, avec la main arrière',
+                'Nose grab' => 'saisie de la partie avant de la planche, avec la main avant',
+                'Japan air' => "saisie de l'avant de la planche, avec la main avant, du côté de la carre frontside",
+                'Seat belt' => "saisie du carre frontside à l'arrière avec la main avant",
+                'Truck driver' => 'saisie du carre avant et carre arrière avec chaque main (comme tenir un volant de voiture)',
+            ],
+            'Rotation' => [
+                '180' => "demi-tour, soit 180 degrés d'angle",
+                '360' => 'trois six pour un tour complet',
+                '540' => 'cinq quatre pour un tour et demi',
+                '720' => 'sept deux pour deux tours complets',
+                '900' => 'deux tours et demi',
+                '1080' => 'trois tours',
+            ],
+            'Flip' => [
+                'Front flip' => 'Rotation en avant',
+                'Back flip' => 'Rotation en arrière',
+            ],
+        ];
     }
 
     public function load(ObjectManager $manager)
     {
         $faker = Factory::create('fr_FR');
-
-        $categories = ['Grab', 'Rotation', 'Flip', 'Slide', 'Old school'];
 
         $users = [];
 
@@ -38,15 +62,11 @@ class AppFixtures extends Fixture
 
             $hash = $this->hasher->hashPassword($user, 'password');
 
-            $profilePicture = new Image();
-            $profilePicture->setName('default-profile.png');
-
             $user
                 ->setEmail("user{$u}@gmail.com")
                 ->setPassword($hash)
                 ->setUsername($faker->userName())
                 ->setIsVerified(true)
-                ->setProfilePicture($profilePicture)
             ;
 
             $users[] = $user;
@@ -54,7 +74,7 @@ class AppFixtures extends Fixture
             $manager->persist($user);
         }
 
-        foreach ($categories as $c) {
+        foreach ($this->categories as $c => $listTricks) {
             $category = new Category();
             $category
                 ->setName($c)
@@ -62,17 +82,13 @@ class AppFixtures extends Fixture
             ;
             $manager->persist($category);
 
-            for ($t = 1; $t <= mt_rand(3, 10); ++$t) {
-                $mainImage = new Image();
-                $mainImage->setName('default-trick.png');
-
+            foreach ($listTricks as $t => $description) {
                 $trick = new Trick();
                 $trick
-                    ->setName($faker->sentence(3))
-                    ->setDescription($faker->paragraph())
+                    ->setName($t)
+                    ->setDescription($description)
                     ->setSlug($this->slugger->slug($trick->getName())->lower())
                     ->setCategory($category)
-                    ->setMainImage($mainImage)
                 ;
                 $manager->persist($trick);
 
@@ -83,7 +99,7 @@ class AppFixtures extends Fixture
                     $manager->persist($image);
                 }
 
-                for ($co = 1; $co <= mt_rand(10, 15); ++$co) {
+                for ($com = 1; $com <= mt_rand(16, 32); ++$com) {
                     $comment = new Comment();
                     $comment
                         ->setContent($faker->paragraph())

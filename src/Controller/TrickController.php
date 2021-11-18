@@ -2,65 +2,38 @@
 
 namespace App\Controller;
 
-use App\Entity\Image;
 use App\Entity\Trick;
 use App\Form\CommentType;
 use App\Form\TrickType;
+use App\Handler\TrickHandler;
 use App\Repository\CommentRepository;
-use App\Service\FileUploader;
-use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\String\Slugger\SluggerInterface;
 
 class TrickController extends AbstractController
 {
-    private $em;
-    private $fileUploader;
-
-    public function __construct(EntityManagerInterface $em, FileUploader $fileUploader)
-    {
-        $this->em = $em;
-        $this->fileUploader = $fileUploader;
-    }
-
     /**
      * @Route("/{slug}", name="trick_show", priority=-1)
      */
-    public function show(Trick $trick, Request $request, CommentRepository $commentRepository)
+    public function show(Trick $trick, Request $request, CommentRepository $commentRepository, TrickHandler $trickHandler)
     {
-        $offset = max(0, $request->query->getInt('offset', 0));
-        $paginator = $commentRepository->getCommentPaginator($trick, $offset);
+        $page = max(0, $request->query->getInt('page', 1));
+        $paginator = $commentRepository->getCommentPaginator($trick, $page);
 
         $form = $this->createForm(CommentType::class);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            if (null === $this->getUser()) {
-                return $this->redirectToRoute('auth_login');
-            }
-
-            $comment = $form->getData();
-            $comment->setTrick($trick);
-            $comment->setUser($this->getUser());
-
-            $this->em->persist($comment);
-            $this->em->flush();
-
-            return $this->redirectToRoute('trick_show', [
-                'slug' => $trick->getSlug(),
-            ]);
+            $trickHandler->addComment($this->getUser(), $form->getData(), $trick);
         }
 
         return $this->render('trick/show.html.twig', [
             'trick' => $trick,
             'comments' => $paginator,
-            'offset' => $offset,
-            'previous' => $offset - CommentRepository::PAGINATOR_PER_PAGE,
-            'next' => min(count($paginator), $offset + CommentRepository::PAGINATOR_PER_PAGE),
+            'page' => $page,
             'commentForm' => $form->createView(),
         ]);
     }
@@ -69,23 +42,14 @@ class TrickController extends AbstractController
      * @Route("/trick/add", name="trick_add")
      * @IsGranted("ROLE_USER")
      */
-    public function add(Request $request, SluggerInterface $slugger)
+    public function add(Request $request, TrickHandler $trickHandler)
     {
         $form = $this->createForm(TrickType::class);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $trick = $form->getData();
-            $trick->setSlug($slugger->slug($trick->getName())->lower());
-            $this->uploadImages($trick);
-
-            $this->em->persist($trick);
-            $this->em->flush();
-
-            return $this->redirectToRoute('trick_show', [
-                'slug' => $trick->getSlug(),
-            ]);
+            $trickHandler->add($form->getData());
         }
 
         return $this->render('trick/add.html.twig', [
@@ -97,23 +61,14 @@ class TrickController extends AbstractController
      * @Route("/{slug}/edit", name="trick_edit")
      * @IsGranted("ROLE_USER")
      */
-    public function edit(Trick $trick, Request $request, SluggerInterface $slugger)
+    public function edit(Trick $trick, Request $request, TrickHandler $trickHandler)
     {
         $form = $this->createForm(TrickType::class, $trick);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $trick->setSlug($slugger->slug($trick->getName())->lower());
-            $trick->setUpdatedAt(new \DateTime());
-
-            $this->uploadImages($trick);
-
-            $this->em->flush();
-
-            return $this->redirectToRoute('trick_show', [
-                'slug' => $trick->getSlug(),
-            ]);
+            $trickHandler->edit($trick);
         }
 
         return $this->render('trick/edit.html.twig', [
@@ -126,31 +81,8 @@ class TrickController extends AbstractController
      * @Route("/{slug}/delete", name="trick_delete")
      * @IsGranted("ROLE_USER")
      */
-    public function delete(Trick $trick)
+    public function delete(Trick $trick, TrickHandler $trickHandler)
     {
-        $this->em->remove($trick);
-        $this->em->flush();
-
-        $this->addFlash('trick_delete_success', 'Le trick a bien été supprimé de la base de donnée');
-
-        return $this->redirectToRoute('homepage');
-    }
-
-    private function uploadImages(Trick $trick)
-    {
-        /** @var Image */
-        $mainImage = $trick->getMainImage();
-        if (null !== $mainImage->getFile()) {
-            $path = $this->fileUploader->upload($mainImage->getFile());
-            $mainImage->setName($path);
-        }
-
-        /** @var Image $image */
-        foreach ($trick->getImages() as $image) {
-            if (null !== $image->getFile()) {
-                $path = $this->fileUploader->upload($image->getFile());
-                $image->setName($path);
-            }
-        }
+        $trickHandler->delete($trick);
     }
 }
