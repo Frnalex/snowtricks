@@ -23,7 +23,7 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $userHandler->profilePicture($this->getUser(), $form);
+            $userHandler->changeProfilePicture($this->getUser(), $form->getData());
         }
 
         return $this->render('profile.html.twig', [
