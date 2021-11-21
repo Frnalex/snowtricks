@@ -23,6 +23,8 @@ class RegisterController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $userHandler->register($user, $form->get('password')->getData());
+
+            return $this->redirectToRoute('auth_login');
         }
 
         return $this->render('authentication/register.html.twig', [
@@ -36,5 +38,7 @@ class RegisterController extends AbstractController
     public function verifyUserEmail(User $user, UserHandler $userHandler)
     {
         $userHandler->verifyEmail($user);
+
+        return $this->redirectToRoute('auth_login');
     }
 }

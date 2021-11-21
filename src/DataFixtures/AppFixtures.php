@@ -16,6 +16,51 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 
 class AppFixtures extends Fixture
 {
+    public const DATA = [
+        'Grab' => [
+            'Mute' => [
+                'description' => 'Saisie de la carre frontside de la planche entre les deux pieds avec la main avant.',
+                'image' => 'mute.jpg',
+            ],
+            'Japan air' => [
+                'description' => "Saisie de l'avant de la planche, avec la main avant, du côté de la carre frontside.",
+                'image' => 'japan-air.jpg',
+            ],
+            'Indy' => [
+                'description' => 'Saisie de la carre frontside de la planche, entre les deux pieds, avec la main arrière.',
+                'image' => 'indy.jpg',
+            ],
+            'Stalefish' => [
+                'description' => 'Saisie de la carre backside de la planche entre les deux pieds avec la main arrière.',
+                'image' => 'stalefish.jpg',
+            ],
+            'Tail grab' => [
+                'description' => 'Saisie de la partie arrière de la planche, avec la main arrière.',
+                'image' => 'tail-grab.jpg',
+            ],
+        ],
+        'Rotation' => [
+            '360' => [
+                'description' => 'Trois six pour un tour complet.',
+                'image' => '360.jpg',
+            ],
+            '1080' => [
+                'description' => 'Trois tours.',
+                'image' => '1080.jpg',
+            ],
+        ],
+        'Flip' => [
+            'Front flip' => [
+                'description' => 'Rotation en avant.',
+                'image' => 'front-flip.jpg',
+            ],
+            'Back flip' => [
+                'description' => 'Rotation en arrière.',
+                'image' => 'back-flip.jpg',
+            ],
+        ],
+    ];
+
     protected $slugger;
     protected $hasher;
     protected $categories;
@@ -24,31 +69,6 @@ class AppFixtures extends Fixture
     {
         $this->slugger = $slugger;
         $this->hasher = $hasher;
-        $this->categories = [
-            'Grab' => [
-                'Mute' => 'saisie de la carre frontside de la planche entre les deux pieds avec la main avant',
-                'Melancholie' => 'saisie de la carre backside de la planche, entre les deux pieds, avec la main avant',
-                'Indy' => 'saisie de la carre frontside de la planche, entre les deux pieds, avec la main arrière',
-                'Stalefish' => 'saisie de la carre backside de la planche entre les deux pieds avec la main arrière',
-                'Tail grab' => 'saisie de la partie arrière de la planche, avec la main arrière',
-                'Nose grab' => 'saisie de la partie avant de la planche, avec la main avant',
-                'Japan air' => "saisie de l'avant de la planche, avec la main avant, du côté de la carre frontside",
-                'Seat belt' => "saisie du carre frontside à l'arrière avec la main avant",
-                'Truck driver' => 'saisie du carre avant et carre arrière avec chaque main (comme tenir un volant de voiture)',
-            ],
-            'Rotation' => [
-                '180' => "demi-tour, soit 180 degrés d'angle",
-                '360' => 'trois six pour un tour complet',
-                '540' => 'cinq quatre pour un tour et demi',
-                '720' => 'sept deux pour deux tours complets',
-                '900' => 'deux tours et demi',
-                '1080' => 'trois tours',
-            ],
-            'Flip' => [
-                'Front flip' => 'Rotation en avant',
-                'Back flip' => 'Rotation en arrière',
-            ],
-        ];
     }
 
     public function load(ObjectManager $manager)
@@ -74,7 +94,7 @@ class AppFixtures extends Fixture
             $manager->persist($user);
         }
 
-        foreach ($this->categories as $c => $listTricks) {
+        foreach (self::DATA as $c => $listTricks) {
             $category = new Category();
             $category
                 ->setName($c)
@@ -82,13 +102,18 @@ class AppFixtures extends Fixture
             ;
             $manager->persist($category);
 
-            foreach ($listTricks as $t => $description) {
+            foreach ($listTricks as $t => $details) {
                 $trick = new Trick();
+
+                $mainImage = new Image();
+                $mainImage->setName($details['image']);
+
                 $trick
                     ->setName($t)
-                    ->setDescription($description)
+                    ->setDescription($details['description'])
                     ->setSlug($this->slugger->slug($trick->getName())->lower())
                     ->setCategory($category)
+                    ->setMainImage($mainImage)
                 ;
                 $manager->persist($trick);
 

@@ -27,6 +27,8 @@ class TrickController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            null === $this->getUser() && $this->redirectToRoute('auth_login');
+
             $trickHandler->addComment($this->getUser(), $form->getData(), $trick);
         }
 
@@ -49,7 +51,11 @@ class TrickController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $trickHandler->add($form->getData());
+            $trick = $trickHandler->add($form->getData());
+
+            return $this->redirectToRoute('trick_show', [
+                'slug' => $trick->getSlug(),
+            ]);
         }
 
         return $this->render('trick/add.html.twig', [
@@ -68,7 +74,11 @@ class TrickController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $trickHandler->edit($trick);
+            $trick = $trickHandler->edit($trick);
+
+            return $this->redirectToRoute('trick_show', [
+                'slug' => $trick->getSlug(),
+            ]);
         }
 
         return $this->render('trick/edit.html.twig', [
@@ -84,5 +94,7 @@ class TrickController extends AbstractController
     public function delete(Trick $trick, TrickHandler $trickHandler)
     {
         $trickHandler->delete($trick);
+
+        return $this->redirectToRoute('homepage');
     }
 }

@@ -5,9 +5,9 @@
 			<div class="blog-img bg-extra-dark-gray">
 				<a href="{{ path("trick_show", {slug: trick.slug}) }}">
 					{% if trick.mainImage %}
-						<img class='border-radius-100' src="{{ asset('uploads/' ~ trick.mainImage.name) }}" alt="Photo du trick">
+						<img src="{{ asset('uploads/' ~ trick.mainImage.name) }}" alt="Photo du trick">
 					{% else %}
-						<img class='border-radius-100' src="{{ asset('images/default-trick.png') }}" alt="Photo de profil">
+						<img src="{{ asset('images/default-trick.png') }}" alt="Photo de profil">
 					{% endif %}
 				</a>
 			</div>
