@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\ImageType;
-use App\Handler\UserHandler;
+use App\Handler\UserHandlerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,7 +16,7 @@ class UserController extends AbstractController
      * @Route("/profile", name="user_profile")
      * @IsGranted("ROLE_USER")
      */
-    public function profile(Request $request, UserHandler $userHandler)
+    public function profile(Request $request, UserHandlerInterface $userHandler)
     {
         $form = $this->createForm(ImageType::class);
 

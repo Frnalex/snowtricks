@@ -6,7 +6,7 @@ use App\Entity\User;
 use App\Form\ForgotPasswordType;
 use App\Form\LoginType;
 use App\Form\RepeatedPasswordType;
-use App\Handler\UserHandler;
+use App\Handler\UserHandlerInterface;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -40,7 +40,7 @@ class AuthenticationController extends AbstractController
     /**
      * @Route("/forgot-password", name="auth_forgot_password")
      */
-    public function forgotPassword(Request $request, UserHandler $userHandler, UserRepository $userRepository, FlashBagInterface $flashBag)
+    public function forgotPassword(Request $request, UserHandlerInterface $userHandler, UserRepository $userRepository, FlashBagInterface $flashBag)
     {
         $form = $this->createForm(ForgotPasswordType::class);
 
@@ -64,7 +64,7 @@ class AuthenticationController extends AbstractController
     /**
      * @Route("/reset-password/{tokenForgotPassword}", name="auth_reset_password")
      */
-    public function resetPassword(User $user, Request $request, UserHandler $userHandler): Response
+    public function resetPassword(User $user, Request $request, UserHandlerInterface $userHandler): Response
     {
         $form = $this->createForm(RepeatedPasswordType::class);
 

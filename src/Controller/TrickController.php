@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Entity\Trick;
 use App\Form\CommentType;
 use App\Form\TrickType;
-use App\Handler\TrickHandler;
+use App\Handler\TrickHandlerInterface;
 use App\Repository\CommentRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -17,7 +17,7 @@ class TrickController extends AbstractController
     /**
      * @Route("/{slug}", name="trick_show", priority=-1)
      */
-    public function show(Trick $trick, Request $request, CommentRepository $commentRepository, TrickHandler $trickHandler)
+    public function show(Trick $trick, Request $request, CommentRepository $commentRepository, TrickHandlerInterface $trickHandler)
     {
         $page = max(0, $request->query->getInt('page', 1));
         $paginator = $commentRepository->getCommentPaginator($trick, $page);
@@ -44,7 +44,7 @@ class TrickController extends AbstractController
      * @Route("/trick/add", name="trick_add")
      * @IsGranted("ROLE_USER")
      */
-    public function add(Request $request, TrickHandler $trickHandler)
+    public function add(Request $request, TrickHandlerInterface $trickHandler)
     {
         $form = $this->createForm(TrickType::class);
 
@@ -67,7 +67,7 @@ class TrickController extends AbstractController
      * @Route("/{slug}/edit", name="trick_edit")
      * @IsGranted("ROLE_USER")
      */
-    public function edit(Trick $trick, Request $request, TrickHandler $trickHandler)
+    public function edit(Trick $trick, Request $request, TrickHandlerInterface $trickHandler)
     {
         $form = $this->createForm(TrickType::class, $trick);
 
@@ -91,7 +91,7 @@ class TrickController extends AbstractController
      * @Route("/{slug}/delete", name="trick_delete")
      * @IsGranted("ROLE_USER")
      */
-    public function delete(Trick $trick, TrickHandler $trickHandler)
+    public function delete(Trick $trick, TrickHandlerInterface $trickHandler)
     {
         $trickHandler->delete($trick);
 
