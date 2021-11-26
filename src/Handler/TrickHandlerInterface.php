@@ -8,11 +8,11 @@ use App\Entity\User;
 
 interface TrickHandlerInterface
 {
-    public function add(Trick $trick);
+    public function add(Trick $trick): Trick;
 
-    public function edit(Trick $trick);
+    public function edit(Trick $trick): Trick;
 
-    public function delete(Trick $trick);
+    public function delete(Trick $trick): void;
 
-    public function addComment(User $user, Comment $comment, Trick $trick);
+    public function addComment(User $user, Comment $comment, Trick $trick): void;
 }

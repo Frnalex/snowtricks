@@ -36,7 +36,7 @@ class UserHandler implements UserHandlerInterface
         $this->hasher = $hasher;
     }
 
-    public function changeProfilePicture(User $user, Image $image)
+    public function changeProfilePicture(User $user, Image $image): void
     {
         if (null !== $image->getFile()) {
             $path = $this->fileUploader->upload($image->getFile());
@@ -48,7 +48,7 @@ class UserHandler implements UserHandlerInterface
         $this->em->flush();
     }
 
-    public function register(User $user, $password)
+    public function register(User $user, $password): void
     {
         $user->setTokenVerification($this->tokenGenerator->generateToken());
         $user->setPassword(
@@ -63,7 +63,7 @@ class UserHandler implements UserHandlerInterface
         $this->flashBag->add('info', 'Veuillez cliquer sur le lien de confirmation envoyé par email avant de vous connecter.');
     }
 
-    public function verifyEmail(User $user)
+    public function verifyEmail(User $user): void
     {
         $user->setTokenVerification(null);
         $user->setIsVerified(true);
@@ -73,7 +73,7 @@ class UserHandler implements UserHandlerInterface
         $this->flashBag->add('success', 'Compte actif !');
     }
 
-    public function forgotPassword(User $user)
+    public function forgotPassword(User $user): void
     {
         $user->setTokenForgotPassword($this->tokenGenerator->generateToken());
 
@@ -85,7 +85,7 @@ class UserHandler implements UserHandlerInterface
         $this->flashBag->add('success', 'Un email vous a été envoyé pour redéfinir votre mot de passe');
     }
 
-    public function resetPassword(User $user, $password)
+    public function resetPassword(User $user, $password): void
     {
         $user->setPassword($this->hasher->hashPassword($user, $password));
         $user->setTokenForgotPassword(null);
