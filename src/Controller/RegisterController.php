@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\RegistrationFormType;
-use App\Handler\UserHandler;
+use App\Handler\UserHandlerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,7 +15,7 @@ class RegisterController extends AbstractController
     /**
      * @Route("/register", name="auth_register")
      */
-    public function register(Request $request, UserHandler $userHandler): Response
+    public function register(Request $request, UserHandlerInterface $userHandler): Response
     {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
@@ -35,7 +35,7 @@ class RegisterController extends AbstractController
     /**
      * @Route("/verify-email/{tokenVerification}", name="auth_verify_email")
      */
-    public function verifyUserEmail(User $user, UserHandler $userHandler)
+    public function verifyUserEmail(User $user, UserHandlerInterface $userHandler)
     {
         $userHandler->verifyEmail($user);
 
